@@ -4,22 +4,23 @@
 -/
 import salsa20.words
 
--- z1
+-- z1 = y1 ⊕ ((y0 + y3) <<< 7)
 def z1 (y0 y1 y2 y3 : bitvec word_len) : bitvec word_len := 
   bitvec.xor y1 (rotate7 (nat_as_bitvec (mod_as_nat (sum_as_mod y0 y3))))
 
--- z2
+-- z2 = y2 ⊕ ((z1 + y0) <<< 9)
 def z2 (y0 y1 y2 y3 : bitvec word_len) : bitvec word_len := 
   bitvec.xor y2 (rotate9 (nat_as_bitvec (mod_as_nat (sum_as_mod (z1 y0 y1 y2 y3) y0))))
 
--- z3
+-- z3 = y3 ⊕ ((z2 + z1) <<< 13)
 def z3 (y0 y1 y2 y3 : bitvec word_len) : bitvec word_len := 
   bitvec.xor y3 (rotate13 (nat_as_bitvec (mod_as_nat (sum_as_mod (z2 y0 y1 y2 y3) (z1 y0 y1 y2 y3)))))
 
--- z0
+-- z0 = y0 ⊕ ((z3 + z2) <<< 18)
 def z0 (y0 y1 y2 y3 : bitvec word_len) : bitvec word_len := 
   bitvec.xor y0 (rotate18 (nat_as_bitvec (mod_as_nat (sum_as_mod (z3 y0 y1 y2 y3) (z2 y0 y1 y2 y3)))))
 
+-- quarterround(y0, y1, y2, y3) = (z0, z1, z2, z3)
 def quarterround (y0 y1 y2 y3 : bitvec word_len) : list (bitvec word_len) :=
   do
     let z1_res := z1 y0 y1 y2 y3,
@@ -27,6 +28,15 @@ def quarterround (y0 y1 y2 y3 : bitvec word_len) : list (bitvec word_len) :=
     let z3_res := z3 y0 y1 y2 y3,
     let z0_res := z0 y0 y1 y2 y3,
     [z0_res, z1_res, z2_res, z3_res]
+
+-- quarterround(0, 0, 0, 0) = [0, 0, 0, 0]
+lemma quarterround_zero : 
+  quarterround 0 0 0 0 = [0, 0, 0, 0] := rfl
+
+-- TODO: The whole quarterround function is invertible
+def quarterround_inv : list (bitvec word_len) :=
+  do 
+    sorry
 
 -- Examples from the spec
 
@@ -206,5 +216,3 @@ def y3 : bitvec word_len := 0x8f887a3b
 #eval ((quarterround y0 y1 y2 y3).head).to_nat
 
 end example7
-
--- TODO: quarterround is invertible
