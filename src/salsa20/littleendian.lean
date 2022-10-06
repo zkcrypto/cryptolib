@@ -4,6 +4,8 @@
 -/
 import salsa20.words
 
+-- If b = (b0, b1, b2, b3) then 
+-- littleendian(b) = b0 + (2^8)*b1 + (2^16)*b2 + (2^24)*b3
 def littleendian (b0 b1 b2 b3 : bitvec word_len) : ℕ := 
   b0.to_nat + ((2^8) * b1.to_nat) + ((2^16) * b2.to_nat) + ((2^24) * b3.to_nat)
 
@@ -12,11 +14,16 @@ def littleendian (b0 b1 b2 b3 : bitvec word_len) : ℕ :=
 #eval littleendian 0 0 0 0
 #eval 0x00000000
 
+lemma littleendian_zero : littleendian 0 0 0 0 = 0 := rfl
+
 #eval littleendian 86 75 30 9
 #eval 0x091e4b56
 
 #eval littleendian 255 255 255 250
 #eval 0xfaffffff
+
+#eval littleendian 255 255 255 255
+#eval 0xffffffff
 
 -- https://crypto.stackexchange.com/a/22314
 def littleendian_inv (w : bitvec word_len) : list ℕ :=

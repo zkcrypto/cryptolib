@@ -4,18 +4,28 @@
 -/
 import salsa20.quarterround
 
+-- (z0, z1, z2, z3) = quarterround(y0, y1, y2, y3)
 def rowround1 (y0 y1 y2 y3 : bitvec word_len) : list (bitvec word_len) := 
   quarterround y0 y1 y2 y3
 
+-- (z5, z6, z7, z4) = quarterround(y5, y6, y7, y4)
 def rowround2 (y5 y6 y7 y4 : bitvec word_len) : list (bitvec word_len) := 
   quarterround y5 y6 y7 y4
 
+-- (z10, z11, z8, z9) = quarterround(y10, y11, y8, y9)
 def rowround3 (y10 y11 y8 y9 : bitvec word_len) : list (bitvec word_len) := 
   quarterround y10 y11 y8 y9
 
+-- (z15, z12, z13, z14) = quarterround(y15, y12, y13, y14)
 def rowround4 (y15 y12 y13 y14 : bitvec word_len) : list (bitvec word_len) := 
   quarterround y15 y12 y13 y14
 
+-- If y = (y0, y1, y2, y3, ... , y15) then 
+-- rowround(y) = (z0, z1, z2, z3, ... , z15) where
+-- (z0, z1, z2, z3) = quarterround(y0, y1, y2, y3)
+-- (z5, z6, z7, z4) = quarterround(y5, y6, y7, y4)
+-- (z10, z11, z8, z9) = quarterround(y10, y11, y8, y9)
+-- (z15, z12, z13, z14) = quarterround(y15, y12, y13, y14)
 def rowround
   (y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15 : 
   bitvec word_len) : list (bitvec word_len) :=
@@ -48,6 +58,8 @@ def rowround
     
     ((list1.append list2_sorted).append list3_sorted).append list4_sorted
 
+lemma rowround_zero : rowround 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 = 
+  [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0] := rfl
 
 -- example 1
 namespace example4_1

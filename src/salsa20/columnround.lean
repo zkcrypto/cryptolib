@@ -4,18 +4,28 @@
 -/
 import salsa20.quarterround
 
+-- (y0, y4, y8, y12) = quarterround(x0, x4, x8, x12)
 def columnround1 (x0 x4 x8 x12 : bitvec word_len) : list (bitvec word_len) := 
   quarterround x0 x4 x8 x12
 
+-- (y5, y9, y13, y1) = quarterround(x5, x9, x13, x1)
 def columnround2 (x5 x9 x13 x1 : bitvec word_len) : list (bitvec word_len) := 
   quarterround x5 x9 x13 x1
 
+-- (y10, y14, y2, y6) = quarterround(x10, x14, x2, x6)
 def columnround3 (x10 x14 x2 x6 : bitvec word_len) : list (bitvec word_len) := 
   quarterround x10 x14 x2 x6
 
+-- (y15, y3, y7, y11) = quarterround(x15, x3, x7, x11)
 def columnround4 (x15 x3 x7 x11 : bitvec word_len) : list (bitvec word_len) := 
   quarterround x15 x3 x7 x11
 
+-- If x = (x0, x1, x2, x3, ... , x15) then 
+-- columnround(x) = (y0, y1, y2, y3, ... , y15) where
+-- (y0, y4, y8, y12) = quarterround(x0, x4, x8, x12)
+-- (y5, y9, y13, y1) = quarterround(x5, x9, x13, x1)
+-- (y10, y14, y2, y6) = quarterround(x10, x14, x2, x6)
+-- (y15, y3, y7, y11) = quarterround(x15, x3, x7, x11)
 def columnround
   (x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15 : 
   bitvec word_len) : list (bitvec word_len) :=
@@ -46,6 +56,9 @@ def columnround
     let y11 := (list4.nth 3).iget,
 
     [y0, y1, y2, y3, y4, y5, y6, y7, y8, y9, y10, y11, y12, y13, y14, y15]
+
+lemma columnround_zero : columnround 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 = 
+  [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0] := rfl
 
 -- example 1
 namespace example5_1
