@@ -13,121 +13,147 @@ variable x : vector (bitvec byte_len) 64
 
 -- x0 = littleendian(x[0], x[1], x[2], x[3])
 def x0 : bitvec word_len := littleendian 
-  (x.nth 0)
-  (x.nth 1)
-  (x.nth 2)
-  (x.nth 3)
+  ([
+    (x.nth 0),
+    (x.nth 1),
+    (x.nth 2),
+    (x.nth 3)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x1 = littleendian(x[4], x[5], x[6], x[7])
 def x1 : bitvec word_len := littleendian 
-  (x.nth 4) 
-  (x.nth 5) 
-  (x.nth 6) 
-  (x.nth 7)
+  ([
+    (x.nth 4), 
+    (x.nth 5),
+    (x.nth 6),
+    (x.nth 7)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x2 = littleendian(x[8], x[9], x[10], x[11])
 def x2 : bitvec word_len := littleendian 
-  (x.nth 8) 
-  (x.nth 9) 
-  (x.nth 10) 
-  (x.nth 11)
+  ([
+    (x.nth 8),
+    (x.nth 9),
+    (x.nth 10),
+    (x.nth 11)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x3 = littleendian(x[12], x[13], x[14], x[15])
 def x3 : bitvec word_len := littleendian 
-  (x.nth 12) 
-  (x.nth 13) 
-  (x.nth 14) 
-  (x.nth 15)
+  ([
+    (x.nth 12),
+    (x.nth 13),
+    (x.nth 14),
+    (x.nth 15)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x4 = littleendian(x[16], x[17], x[18], x[19])
 def x4 : bitvec word_len := littleendian 
-  (x.nth 16) 
-  (x.nth 17) 
-  (x.nth 18) 
-  (x.nth 19)
+  ([
+    (x.nth 16),
+    (x.nth 17),
+    (x.nth 18),
+    (x.nth 19)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x5 = littleendian(x[20], x[21], x[22], x[23])
 def x5 : bitvec word_len := littleendian 
-  (x.nth 20) 
-  (x.nth 21) 
-  (x.nth 22) 
-  (x.nth 23)
+  ([
+    (x.nth 20),
+    (x.nth 21),
+    (x.nth 22),
+    (x.nth 23)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x6 = littleendian(x[24], x[25], x[26], x[27])
 def x6 : bitvec word_len := littleendian 
-  (x.nth 24) 
-  (x.nth 25) 
-  (x.nth 26) 
-  (x.nth 27)
+  ([
+    (x.nth 24),
+    (x.nth 25),
+    (x.nth 26),
+    (x.nth 27)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x7 = littleendian(x[28], x[29], x[30], x[31])
 def x7 : bitvec word_len := littleendian 
-  (x.nth 28) 
-  (x.nth 29) 
-  (x.nth 30) 
-  (x.nth 31)
+  ([
+    (x.nth 28),
+    (x.nth 29),
+    (x.nth 30),
+    (x.nth 31)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x8 = littleendian(x[32], x[33], x[34], x[35])
 def x8 : bitvec word_len := littleendian 
-  (x.nth 32) 
-  (x.nth 33) 
-  (x.nth 34) 
-  (x.nth 35)
+  ([
+    (x.nth 32),
+    (x.nth 33),
+    (x.nth 34),
+    (x.nth 35)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x9 = littleendian(x[36], x[37], x[38], x[39])
 def x9 : bitvec word_len := littleendian 
-  (x.nth 36) 
-  (x.nth 37) 
-  (x.nth 38) 
-  (x.nth 39)
+  ([
+    (x.nth 36),
+    (x.nth 37),
+    (x.nth 38),
+    (x.nth 39)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x10 = littleendian(x[40], x[41], x[42], x[43])
 def x10 : bitvec word_len := littleendian 
-  (x.nth 40) 
-  (x.nth 41) 
-  (x.nth 42) 
-  (x.nth 43)
+  ([
+    (x.nth 40),
+    (x.nth 41),
+    (x.nth 42),
+    (x.nth 43)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x11 = littleendian(x[44], x[45], x[46], x[47])
 def x11 : bitvec word_len := littleendian 
-  (x.nth 44) 
-  (x.nth 45) 
-  (x.nth 46) 
-  (x.nth 47)
+  ([
+    (x.nth 44),
+    (x.nth 45),
+    (x.nth 46),
+    (x.nth 47)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x12 = littleendian(x[48], x[49], x[50], x[51])
 def x12 : bitvec word_len := littleendian 
-  (x.nth 48) 
-  (x.nth 49) 
-  (x.nth 50) 
-  (x.nth 51)
+  ([
+    (x.nth 48),
+    (x.nth 49),
+    (x.nth 50),
+    (x.nth 51)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x13 = littleendian(x[52], x[53], x[54], x[55])
 def x13 : bitvec word_len := littleendian 
-  (x.nth 52) 
-  (x.nth 53) 
-  (x.nth 54) 
-  (x.nth 55)
+  ([
+    (x.nth 52),
+    (x.nth 53),
+    (x.nth 54),
+    (x.nth 55)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x14 = littleendian(x[56], x[57], x[58], x[59])
 def x14 : bitvec word_len := littleendian 
-  (x.nth 56) 
-  (x.nth 57) 
-  (x.nth 58) 
-  (x.nth 59)
+  ([
+    (x.nth 56),
+    (x.nth 57),
+    (x.nth 58),
+    (x.nth 59)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- x15 = littleendian(x[60], x[61], x[62], x[63])
 def x15 : bitvec word_len := littleendian 
-  (x.nth 60) 
-  (x.nth 61) 
-  (x.nth 62) 
-  (x.nth 63)
-
--- Given a list `l`, where each element is of type 
--- `bitvec` of a given length `len`, convert this to a
--- `vector` truncating the list at 64 elements. 
-def list_to_vec (len: ℕ) (l : list (bitvec len)) : vector (bitvec len ) 64 :=
-  ⟨list.take' 64 l, list.take'_length 64 l⟩  
+  ([
+    (x.nth 60),
+    (x.nth 61),
+    (x.nth 62),
+    (x.nth 63)
+  ].to_vec_of_bitvec byte_len 4)
 
 -- Doubleround to the n power (doubleround n times)
 def doubleround_exp_n : 
@@ -154,12 +180,12 @@ def doubleround_exp_n :
     let round := doubleround w0 w1 w2 w3 w4 w5 w6 w7 w8
       w9 w10 w11 w12 w13 w14 w15,
 
-    doubleround_exp_n (n) (list_to_vec word_len round)
+    doubleround_exp_n (n) (list.to_vec_of_bitvec word_len 64 round)
 }
 
 -- (z0, z1, . . . , z15) = doubleround¹⁰(x0, x1, . . . , x15)
 def z : vector (bitvec word_len) 64 := 
-  doubleround_exp_n 10 (list_to_vec word_len [
+  doubleround_exp_n 10 (list.to_vec_of_bitvec word_len 64 [
     x0 x,
     x1 x,
     x2 x,
@@ -201,7 +227,7 @@ def z15 : bitvec word_len := (z x).nth 15
 -- littleendian⁻¹(z2 + x2),
 -- ...
 -- littleendian]⁻¹(z15 + x15).
-def salsa20 : list (bitvec byte_len) := do
+def salsa20 : vector (bitvec byte_len) 64 := do
   let s0 := littleendian_inv ((z0 x) + (x0 x)),
   let s1 := littleendian_inv ((z1 x) + (x1 x)),
   let s2 := littleendian_inv ((z2 x) + (x2 x)),
@@ -226,7 +252,7 @@ def salsa20 : list (bitvec byte_len) := do
     .append s15)
 
 lemma salsa20_zero : salsa20
-  (list_to_vec byte_len [
+  (list.to_vec_of_bitvec byte_len 64 [
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -235,7 +261,7 @@ lemma salsa20_zero : salsa20
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0
-  ]) = [
+  ]) = list.to_vec_of_bitvec byte_len 64 [
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -259,7 +285,7 @@ end
 namespace examples
 
 #eval if salsa20
-  (list_to_vec byte_len [
+  (list.to_vec_of_bitvec byte_len 64 [
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -268,7 +294,7 @@ namespace examples
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0
-  ]) = [
+  ]) = list.to_vec_of_bitvec byte_len 64 [
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -280,7 +306,7 @@ namespace examples
   ] then tt else ff
 
 #eval
-  if salsa20 (list_to_vec byte_len [
+  if salsa20 (list.to_vec_of_bitvec byte_len 64 [
     211, 159, 13, 115, 76, 55, 82, 183,
     3, 117, 222, 37, 191, 187, 234, 136,
     49, 237, 179, 48, 1, 106, 178, 219,
@@ -289,7 +315,7 @@ namespace examples
     116, 147, 48, 113, 238, 55, 204, 36,
     79, 201, 235, 79, 3, 81, 156, 47,
     203, 26, 244, 243, 88, 118, 104, 54
-  ]) = [
+  ]) = list.to_vec_of_bitvec byte_len 64 [
     109, 42, 178, 168, 156, 240, 248, 238, 
     168, 196, 190, 203, 26, 110, 170, 154,
     29, 29, 150, 26, 150, 30, 235, 249, 
@@ -301,7 +327,7 @@ namespace examples
   ] then tt else ff
 
 #eval
-  if salsa20 (list_to_vec byte_len [
+  if salsa20 (list.to_vec_of_bitvec byte_len 64 [
     88, 118, 104, 54, 79, 201, 235, 79,
     3, 81, 156, 47, 203, 26, 244, 243,
     191, 187, 234, 136, 211, 159, 13, 115,
@@ -310,7 +336,7 @@ namespace examples
     1, 106, 178, 219, 175, 199, 166, 48,
     238, 55,204, 36, 31, 240, 32, 63, 15,
     83, 93, 161, 116, 147, 48,113
-  ]) = [
+  ]) = list.to_vec_of_bitvec byte_len 64 [
     179, 19, 48, 202, 219, 236, 232, 135,
     111, 155, 110, 18, 24, 232, 95, 158,
     26, 110, 170, 154, 109, 42, 178, 168,

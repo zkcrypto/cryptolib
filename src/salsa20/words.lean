@@ -14,6 +14,8 @@ import data.list.basic
 import data.zmod.basic
 import tactics
 
+import to_mathlib
+
 -- A byte is a bitvec of 8 bits
 def byte_len : ℕ := 8
 -- A word is a bitvec of 32 bits
