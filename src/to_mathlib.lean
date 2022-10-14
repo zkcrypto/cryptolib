@@ -141,3 +141,21 @@ begin
 end
 
 end group 
+
+/-
+ ---------------------------------------------------------
+  To list
+ ---------------------------------------------------------
+-/
+
+namespace list
+
+-- Given a list `l`, where each element is of type 
+-- `bitvec` of a given length `len`, convert this to a
+-- `vector`, truncating the list at `len_vec` elements. 
+def to_vec_of_bitvec 
+  (len_bitvec : ℕ) (len_vec: ℕ) (l : list (bitvec len_bitvec)) : 
+  vector (bitvec len_bitvec ) len_vec :=
+    ⟨list.take' len_vec l, list.take'_length len_vec l⟩ 
+
+end list
