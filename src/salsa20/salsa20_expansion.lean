@@ -105,5 +105,8 @@ def res2 : list(bitvec byte_len) := [
 
 end examples
 
+-- TODO:
+-- The constants σ₀ σ₁ σ₂ σ₃ and τ₀ τ₁ τ₂ τ₃ are "expand 32-byte k" 
+-- and "expand 16-byte k" in ASCII
 
 end salsa20_expansion
