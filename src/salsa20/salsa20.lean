@@ -226,7 +226,7 @@ def z15 : bitvec word_len := (z x).nth 15
 -- littleendian⁻¹(z1 + x1),
 -- littleendian⁻¹(z2 + x2),
 -- ...
--- littleendian]⁻¹(z15 + x15).
+-- littleendian⁻¹(z15 + x15).
 def salsa20 : vector (bitvec byte_len) 64 := do
   let s0 := littleendian_inv ((z0 x) + (x0 x)),
   let s1 := littleendian_inv ((z1 x) + (x1 x)),
