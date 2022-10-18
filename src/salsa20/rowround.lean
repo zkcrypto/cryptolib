@@ -4,145 +4,147 @@
 -/
 import salsa20.quarterround
 
--- (z0, z1, z2, z3) = quarterround(y0, y1, y2, y3)
-def rowround1 (y0 y1 y2 y3 : bitvec word_len) : list (bitvec word_len) := 
-  quarterround y0 y1 y2 y3
+-- (z₀, z₁, z₂, z₃) = quarterround(y₀, y₁, y₂, y₃)
+def rowround1 (y₀ y₁ y₂ y₃ : bitvec word_len) : vector (bitvec word_len) 4 := 
+  quarterround ([y₀, y₁, y₂, y₃].to_vec_of_bitvec word_len 4)
 
--- (z5, z6, z7, z4) = quarterround(y5, y6, y7, y4)
-def rowround2 (y5 y6 y7 y4 : bitvec word_len) : list (bitvec word_len) := 
-  quarterround y5 y6 y7 y4
+-- (z₅, z₆, z₇, z₄) = quarterround(y₅, y₆, y₇, y₄)
+def rowround2 (y₅ y₆ y₇ y₄ : bitvec word_len) : vector (bitvec word_len) 4 := 
+  quarterround ([y₅, y₆, y₇, y₄].to_vec_of_bitvec word_len 4)
 
--- (z10, z11, z8, z9) = quarterround(y10, y11, y8, y9)
-def rowround3 (y10 y11 y8 y9 : bitvec word_len) : list (bitvec word_len) := 
-  quarterround y10 y11 y8 y9
+-- (z₁₀, z₁₁, z₈, z₉) = quarterround(y₁₀, y₁₁, y₈, y₉)
+def rowround3 (y₁₀ y₁₁ y₈ y₉ : bitvec word_len) : vector (bitvec word_len) 4 := 
+  quarterround ([y₁₀, y₁₁, y₈, y₉].to_vec_of_bitvec word_len 4)
 
--- (z15, z12, z13, z14) = quarterround(y15, y12, y13, y14)
-def rowround4 (y15 y12 y13 y14 : bitvec word_len) : list (bitvec word_len) := 
-  quarterround y15 y12 y13 y14
+-- (z₁₅, z₁₂, z₁₃, z₁₄) = quarterround(y₁₅, y₁₂, y₁₃, y₁₄)
+def rowround4 (y₁₅ y₁₂ y₁₃ y₁₄ : bitvec word_len) : vector (bitvec word_len) 4 := 
+  quarterround ([y₁₅, y₁₂, y₁₃, y₁₄].to_vec_of_bitvec word_len 4)
 
--- If y = (y0, y1, y2, y3, ... , y15) then 
--- rowround(y) = (z0, z1, z2, z3, ... , z15) where
--- (z0, z1, z2, z3) = quarterround(y0, y1, y2, y3)
--- (z5, z6, z7, z4) = quarterround(y5, y6, y7, y4)
--- (z10, z11, z8, z9) = quarterround(y10, y11, y8, y9)
--- (z15, z12, z13, z14) = quarterround(y15, y12, y13, y14)
-def rowround
-  (y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15 : 
-  bitvec word_len) : list (bitvec word_len) :=
+-- If y = (y₀, y₁, y₂, y₃, ... , y₁₅) then 
+-- rowround(y) = (z₀, z₁, z₂, z₃, ... , z₁₅) where
+-- (z₀, z₁, z₂, z₃) = quarterround(y₀, y₁, y₂, y₃)
+-- (z₅, z₆, z₇, z₄) = quarterround(y₅, y₆, y₇, y₄)
+-- (z₁₀, z₁₁, z₈, z₉) = quarterround(y₁₀, y₁₁, y₈, y₉)
+-- (z₁₅, z₁₂, z₁₃, z₁₄) = quarterround(y₁₅, y₁₂, y₁₃, y₁₄)
+def rowround (y : vector(bitvec word_len) 16) : vector (bitvec word_len) 16 :=
   do
-    let list1 := rowround1 y0 y1 y2 y3,
-    let list2 := rowround2 y5 y6 y7 y4,
-    let list3 := rowround3 y10 y11 y8 y9,
-    let list4 := rowround4 y15 y12 y13 y14,
+    let list1 := rowround1 (y.nth 0) (y.nth 1) (y.nth 2) (y.nth 3),
+    let list2 := rowround2 (y.nth 5) (y.nth 6) (y.nth 7) (y.nth 4),
+    let list3 := rowround3 (y.nth 10) (y.nth 11) (y.nth 8) (y.nth 9),
+    let list4 := rowround4 (y.nth 15) (y.nth 12) (y.nth 13) (y.nth 14),
 
-    let z5 := list2.head,
-    let z6 := (list2.nth 1).iget,
-    let z7 := (list2.nth 2).iget,
-    let z4 := (list2.nth 3).iget,
+    let z₅ := list2.head,
+    let z₆ := list2.nth 1,
+    let z₇ := list2.nth 2,
+    let z₄ := list2.nth 3,
 
-    let list2_sorted := [z4, z5, z6, z7], 
+    let list2_sorted := [z₄, z₅, z₆, z₇].to_vec_of_bitvec word_len 4, 
 
-    let z10 := list3.head,
-    let z11 := (list3.nth 1).iget,
-    let z8 := (list3.nth 2).iget,
-    let z9 := (list3.nth 3).iget,
+    let z₁₀ := list3.head,
+    let z₁₁ := list3.nth 1,
+    let z₈ := list3.nth 2,
+    let z₉ := list3.nth 3,
 
-    let list3_sorted := [z8, z9, z10, z11],
+    let list3_sorted := [z₈, z₉, z₁₀, z₁₁].to_vec_of_bitvec word_len 4,
 
-    let z15 := list4.head,
-    let z12 := (list4.nth 1).iget,
-    let z13 := (list4.nth 2).iget,
-    let z14 := (list4.nth 3).iget,
+    let z₁₅ := list4.head,
+    let z₁₂ := list4.nth 1,
+    let z₁₃ := list4.nth 2,
+    let z₁₄ := list4.nth 3,
 
-    let list4_sorted := [z12, z13, z14, z15],
+    let list4_sorted := [z₁₂, z₁₃, z₁₄, z₁₅].to_vec_of_bitvec word_len 4,
     
     ((list1.append list2_sorted).append list3_sorted).append list4_sorted
 
-lemma rowround_zero : rowround 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 = 
-  [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0] := rfl
+lemma rowround_zero : 
+  rowround ([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec word_len 16) = 
+    [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0].to_vec_of_bitvec word_len 16 := rfl
 
 -- example 1
 namespace example4_1
 
-def y0 : bitvec word_len := 0x00000001
-def y1 : bitvec word_len := 0x00000000
-def y2 : bitvec word_len := 0x00000000
-def y3 : bitvec word_len := 0x00000000
-def y4 : bitvec word_len := 0x00000001
-def y5 : bitvec word_len := 0x00000000
-def y6 : bitvec word_len := 0x00000000
-def y7 : bitvec word_len := 0x00000000
-def y8 : bitvec word_len := 0x00000001
-def y9 : bitvec word_len := 0x00000000
-def y10 : bitvec word_len := 0x00000000
-def y11 : bitvec word_len := 0x00000000
-def y12 : bitvec word_len := 0x00000001
-def y13 : bitvec word_len := 0x00000000
-def y14 : bitvec word_len := 0x00000000
-def y15 : bitvec word_len := 0x00000000
+def y₀ : bitvec word_len := 0x00000001
+def y₁ : bitvec word_len := 0x00000000
+def y₂ : bitvec word_len := 0x00000000
+def y₃ : bitvec word_len := 0x00000000
+def y₄ : bitvec word_len := 0x00000001
+def y₅ : bitvec word_len := 0x00000000
+def y₆ : bitvec word_len := 0x00000000
+def y₇  : bitvec word_len := 0x00000000
+def y₈ : bitvec word_len := 0x00000001
+def y₉ : bitvec word_len := 0x00000000
+def y₁₀ : bitvec word_len := 0x00000000
+def y₁₁ : bitvec word_len := 0x00000000
+def y₁₂ : bitvec word_len := 0x00000001
+def y₁₃ : bitvec word_len := 0x00000000
+def y₁₄ : bitvec word_len := 0x00000000
+def y₁₅ : bitvec word_len := 0x00000000
 
--- z0
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 0).iget).to_nat
+def y : vector (bitvec word_len) 16 := 
+  [y₀, y₁, y₂, y₃, y₄, y₅, y₆, y₇, y₈, y₉, y₁₀, y₁₁, y₁₂, y₁₃, y₁₄, y₁₅].to_vec_of_bitvec word_len 16
+
+-- z₀
+#eval ((rowround y).nth 0).to_nat
 #eval 0x08008145
 
--- z1
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 1).iget).to_nat
+-- z₁
+#eval ((rowround y).nth 1).to_nat
 #eval 0x00000080
 
--- z2
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 2).iget).to_nat
+-- z₂
+#eval ((rowround y).nth 2).to_nat
 #eval 0x00010200
 
--- z3
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 3).iget).to_nat
+-- z₃
+#eval ((rowround y).nth 3).to_nat
 #eval 0x20500000
 
--- z4
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 4).iget).to_nat
+-- z₄
+#eval ((rowround y).nth 4).to_nat
 #eval 0x20100001
 
--- z5
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 5).iget).to_nat
+-- z₅
+#eval ((rowround y).nth 5).to_nat
 #eval 0x00048044
 
--- z6
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 6).iget).to_nat
+-- z₆
+#eval ((rowround y).nth 6).to_nat
 #eval 0x00000080
 
--- z7
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 7).iget).to_nat
+-- z₇
+#eval ((rowround y).nth 7).to_nat
 #eval 0x00010000
 
--- z8
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 8).iget).to_nat
+-- z₈
+#eval ((rowround y).nth 8).to_nat
 #eval 0x00000001
 
--- z9
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 9).iget).to_nat
+-- z₉
+#eval ((rowround y).nth 9).to_nat
 #eval 0x00002000
 
--- z10
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 10).iget).to_nat
+-- z₁₀
+#eval ((rowround y).nth 10).to_nat
 #eval 0x80040000
 
--- z11
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 11).iget).to_nat
+-- z₁₁
+#eval ((rowround y).nth 11).to_nat
 #eval 0x00000000
 
--- z12
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 12).iget).to_nat
+-- z₁₂
+#eval ((rowround y).nth 12).to_nat
 #eval 0x00000001
 
--- z13
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 13).iget).to_nat
+-- z₁₃
+#eval ((rowround y).nth 13).to_nat
 #eval 0x00000200
 
--- z14
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 14).iget).to_nat
+-- z₁₄
+#eval ((rowround y).nth 14).to_nat
 #eval 0x00402000
 
--- z15
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 15).iget).to_nat
+-- z₁₅
+#eval ((rowround y).nth 15).to_nat
 #eval 0x88000100
 
 end example4_1
@@ -150,85 +152,88 @@ end example4_1
 -- example 2
 namespace example4_2
 
-def y0 : bitvec word_len := 0x08521bd6
-def y1 : bitvec word_len := 0x1fe88837
-def y2 : bitvec word_len := 0xbb2aa576
-def y3 : bitvec word_len := 0x3aa26365
-def y4 : bitvec word_len := 0xc54c6a5b
-def y5 : bitvec word_len := 0x2fc74c2f
-def y6 : bitvec word_len := 0x6dd39cc3
-def y7 : bitvec word_len := 0xda0a64f6
-def y8 : bitvec word_len := 0x90a2f23d
-def y9 : bitvec word_len := 0x067f95a6
-def y10 : bitvec word_len := 0x06b35f61
-def y11 : bitvec word_len := 0x41e4732e
-def y12 : bitvec word_len := 0xe859c100
-def y13 : bitvec word_len := 0xea4d84b7
-def y14 : bitvec word_len := 0x0f619bff
-def y15 : bitvec word_len := 0xbc6e965a
+def y₀ : bitvec word_len := 0x08521bd6
+def y₁ : bitvec word_len := 0x1fe88837
+def y₂ : bitvec word_len := 0xbb2aa576
+def y₃ : bitvec word_len := 0x3aa26365
+def y₄ : bitvec word_len := 0xc54c6a5b
+def y₅ : bitvec word_len := 0x2fc74c2f
+def y₆ : bitvec word_len := 0x6dd39cc3
+def y₇ : bitvec word_len := 0xda0a64f6
+def y₈ : bitvec word_len := 0x90a2f23d
+def y₉ : bitvec word_len := 0x067f95a6
+def y₁₀ : bitvec word_len := 0x06b35f61
+def y₁₁ : bitvec word_len := 0x41e4732e
+def y₁₂ : bitvec word_len := 0xe859c100
+def y₁₃ : bitvec word_len := 0xea4d84b7
+def y₁₄ : bitvec word_len := 0x0f619bff
+def y₁₅ : bitvec word_len := 0xbc6e965a
 
--- z0
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 0).iget).to_nat
+def y : vector (bitvec word_len) 16 := 
+  [y₀, y₁, y₂, y₃, y₄, y₅, y₆, y₇, y₈, y₉, y₁₀, y₁₁, y₁₂, y₁₃, y₁₄, y₁₅].to_vec_of_bitvec word_len 16
+
+-- z₀
+#eval ((rowround y).nth 0).to_nat
 #eval 0xa890d39d
 
--- z1
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 1).iget).to_nat
+-- z₁
+#eval ((rowround y).nth 1).to_nat
 #eval 0x65d71596
 
--- z2
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 2).iget).to_nat
+-- z₂
+#eval ((rowround y).nth 2).to_nat
 #eval 0xe9487daa
 
--- z3
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 3).iget).to_nat
+-- z₃
+#eval ((rowround y).nth 3).to_nat
 #eval 0xc8ca6a86
 
--- z4
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 4).iget).to_nat
+-- z₄
+#eval ((rowround y).nth 4).to_nat
 #eval 0x949d2192
 
--- z5
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 5).iget).to_nat
+-- z₅
+#eval ((rowround y).nth 5).to_nat
 #eval 0x764b7754
 
--- z6
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 6).iget).to_nat
+-- z₆
+#eval ((rowround y).nth 6).to_nat
 #eval 0xe408d9b9
 
--- z7
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 7).iget).to_nat
+-- z₇
+#eval ((rowround y).nth 7).to_nat
 #eval 0x7a41b4d1
 
--- z8
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 8).iget).to_nat
+-- z₈
+#eval ((rowround y).nth 8).to_nat
 #eval 0x3402e183
 
--- z9
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 9).iget).to_nat
+-- z₉
+#eval ((rowround y).nth 9).to_nat
 #eval 0x3c3af432
 
--- z10
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 10).iget).to_nat
+-- z₁₀
+#eval ((rowround y).nth 10).to_nat
 #eval 0x50669f96
 
--- z11
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 11).iget).to_nat
+-- z₁₁
+#eval ((rowround y).nth 11).to_nat
 #eval 0xd89ef0a8
 
--- z12
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 12).iget).to_nat
+-- z₁₂
+#eval ((rowround y).nth 12).to_nat
 #eval 0x0040ede5
 
--- z13
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 13).iget).to_nat
+-- z₁₃
+#eval ((rowround y).nth 13).to_nat
 #eval 0xb545fbce
 
--- z14
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 14).iget).to_nat
+-- z₁₄
+#eval ((rowround y).nth 14).to_nat
 #eval 0xd257ed4f
 
--- z15
-#eval (((rowround y0 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14 y15).nth 15).iget).to_nat
+-- z₁₅
+#eval ((rowround y).nth 15).to_nat
 #eval 0x1818882d
 
 end example4_2

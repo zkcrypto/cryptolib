@@ -6,6 +6,8 @@ import salsa20.words
 import salsa20.doubleround
 import salsa20.littleendian
 
+open littleendian
+
 namespace salsa20
 
 -- x is a 64-byte sequence
@@ -64,6 +66,7 @@ def doubleround_exp_n :
   ℕ → vector (bitvec word_len) 64 → vector (bitvec word_len) 64
 | 0 v := v
 | (n+1) v := do {
+    
     let w₀ := (v.nth 0),
     let w₁ := (v.nth 1),
     let w₂ := (v.nth 2),
@@ -81,9 +84,11 @@ def doubleround_exp_n :
     let w₁₄ := (v.nth 14),
     let w₁₅ := (v.nth 15),
 
-    let round := doubleround w₀ w₁ w₂ w₃ w₄ w₅ w₆ w₇ w₈ w₉ w₁₀ w₁₁ w₁₂ w₁₃ w₁₄ w₁₅,
+    let round := 
+      doubleround ([w₀, w₁, w₂, w₃, w₄, w₅, w₆, w₇, w₈, w₉, w₁₀, w₁₁, w₁₂, w₁₃, w₁₄, w₁₅].to_vec_of_bitvec word_len 16),
 
-    doubleround_exp_n (n) (list.to_vec_of_bitvec word_len 64 round)
+    let round_as_list := round.to_list,
+    doubleround_exp_n (n) (list.to_vec_of_bitvec word_len 64 round_as_list)
 }
 
 -- (z₀, z₁, ... , z₁₅) = doubleround¹⁰(x₀, x₁, ... , x₁₅)
