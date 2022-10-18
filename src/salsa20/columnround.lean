@@ -4,144 +4,147 @@
 -/
 import salsa20.quarterround
 
--- (y0, y4, y8, y12) = quarterround(x0, x4, x8, x12)
-def columnround1 (x0 x4 x8 x12 : bitvec word_len) : list (bitvec word_len) := 
-  quarterround x0 x4 x8 x12
+-- (y₀, y₄, y₈, y₁₂) = quarterround(x₀, x₄, x₈, x₁₂)
+def columnround1 (x₀ x₄ x₈ x₁₂ : bitvec word_len) : vector (bitvec word_len) 4 := 
+  quarterround ([x₀, x₄, x₈, x₁₂].to_vec_of_bitvec word_len 4)
 
--- (y5, y9, y13, y1) = quarterround(x5, x9, x13, x1)
-def columnround2 (x5 x9 x13 x1 : bitvec word_len) : list (bitvec word_len) := 
-  quarterround x5 x9 x13 x1
+-- (y₅, y₉, y₁₃, y₁) = quarterround(x₅, x₉, x₁₃, x₁)
+def columnround2 (x₅ x₉ x₁₃ x₁ : bitvec word_len) : vector (bitvec word_len) 4 := 
+  quarterround ([x₅, x₉, x₁₃, x₁].to_vec_of_bitvec word_len 4)
 
--- (y10, y14, y2, y6) = quarterround(x10, x14, x2, x6)
-def columnround3 (x10 x14 x2 x6 : bitvec word_len) : list (bitvec word_len) := 
-  quarterround x10 x14 x2 x6
+-- (y₁₀, y₁₄, y₂, y₆) = quarterround(x₁₀, x₁₄, x₂, x₆)
+def columnround3 (x₁₀ x₁₄ x₂ x₆ : bitvec word_len) : vector (bitvec word_len) 4 := 
+  quarterround ([x₁₀, x₁₄, x₂, x₆].to_vec_of_bitvec word_len 4)
 
--- (y15, y3, y7, y11) = quarterround(x15, x3, x7, x11)
-def columnround4 (x15 x3 x7 x11 : bitvec word_len) : list (bitvec word_len) := 
-  quarterround x15 x3 x7 x11
+-- (y₁₅, y₃, y₇, y₁₁) = quarterround(x₁₅, x₃, x₇, x₁₁)
+def columnround4 (x₁₅ x₃ x₇ x₁₁ : bitvec word_len) : vector (bitvec word_len) 4 := 
+  quarterround ([x₁₅, x₃, x₇, x₁₁].to_vec_of_bitvec word_len 4)
 
--- If x = (x0, x1, x2, x3, ... , x15) then 
--- columnround(x) = (y0, y1, y2, y3, ... , y15) where
--- (y0, y4, y8, y12) = quarterround(x0, x4, x8, x12)
--- (y5, y9, y13, y1) = quarterround(x5, x9, x13, x1)
--- (y10, y14, y2, y6) = quarterround(x10, x14, x2, x6)
--- (y15, y3, y7, y11) = quarterround(x15, x3, x7, x11)
+-- If x = (x₀, x₁, x₂, x₃, ... , x₁₅) then 
+-- columnround(x) = (y₀, y₁, y₂, y₃, ... , y₁₅) where
+-- (y₀, y₄, y₈, y₁₂) = quarterround(x₀, x₄, x₈, x₁₂)
+-- (y₅, y₉, y₁₃, y₁) = quarterround(x₅, x₉, x₁₃, x₁)
+-- (y₁₀, y₁₄, y₂, y₆) = quarterround(x₁₀, x₁₄, x₂, x₆)
+-- (y₁₅, y₃, y₇, y₁₁) = quarterround(x₁₅, x₃, x₇, x₁₁)
 def columnround
-  (x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15 : 
-  bitvec word_len) : list (bitvec word_len) :=
+  (x : vector (bitvec word_len) 16) : vector (bitvec word_len) 16 :=
   do
-    let list1 := columnround1 x0 x4 x8 x12,
-    let list2 := columnround2 x5 x9 x13 x1,
-    let list3 := columnround3 x10 x14 x2 x6,
-    let list4 := columnround4 x15 x3 x7 x11,
+    let list1 := columnround1 (x.nth 0) (x.nth 4) (x.nth 8) (x.nth 12),
+    let list2 := columnround2 (x.nth 5) (x.nth 9) (x.nth 13) (x.nth 1),
+    let list3 := columnround3 (x.nth 10) (x.nth 14) (x.nth 2) (x.nth 6),
+    let list4 := columnround4 (x.nth 15) (x.nth 3) (x.nth 7) (x.nth 11),
 
-    let y0 := list1.head,
-    let y4 := (list1.nth 1).iget,
-    let y8 := (list1.nth 2).iget,
-    let y12 := (list1.nth 3).iget,
+    let y₀ := list1.head,
+    let y₄ := list1.nth 1,
+    let y₈ := list1.nth 2,
+    let y₁₂ := list1.nth 3,
 
-    let y5 := list2.head,
-    let y9 := (list2.nth 1).iget,
-    let y13 := (list2.nth 2).iget,
-    let y1 := (list2.nth 3).iget,
+    let y₅ := list2.head,
+    let y₉ := list2.nth 1,
+    let y₁₃ := list2.nth 2,
+    let y₁ := list2.nth 3,
 
-    let y10 := list3.head,
-    let y14 := (list3.nth 1).iget,
-    let y2 := (list3.nth 2).iget,
-    let y6 := (list3.nth 3).iget,
+    let y₁₀ := list3.head,
+    let y₁₄ := list3.nth 1,
+    let y₂ := list3.nth 2,
+    let y₆ := list3.nth 3,
 
-    let y15 := list4.head,
-    let y3 := (list4.nth 1).iget,
-    let y7 := (list4.nth 2).iget,
-    let y11 := (list4.nth 3).iget,
+    let y₁₅ := list4.head,
+    let y₃ := list4.nth 1,
+    let y₇ := list4.nth 2,
+    let y₁₁ := list4.nth 3,
 
-    [y0, y1, y2, y3, y4, y5, y6, y7, y8, y9, y10, y11, y12, y13, y14, y15]
+    [y₀, y₁, y₂, y₃, y₄, y₅, y₆, y₇, y₈, y₉, y₁₀, y₁₁, y₁₂, y₁₃, y₁₄, y₁₅].to_vec_of_bitvec word_len 16
 
-lemma columnround_zero : columnround 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 = 
-  [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0] := rfl
+lemma columnround_zero : 
+  columnround ([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec word_len 16) = 
+    [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0].to_vec_of_bitvec word_len 16 := rfl
 
 -- example 1
 namespace example5_1
 
-def x0 : bitvec word_len := 0x00000001
-def x1 : bitvec word_len := 0x00000000
-def x2 : bitvec word_len := 0x00000000
-def x3 : bitvec word_len := 0x00000000
-def x4 : bitvec word_len := 0x00000001
-def x5 : bitvec word_len := 0x00000000
-def x6 : bitvec word_len := 0x00000000
-def x7 : bitvec word_len := 0x00000000
-def x8 : bitvec word_len := 0x00000001
-def x9 : bitvec word_len := 0x00000000
-def x10 : bitvec word_len := 0x00000000
-def x11 : bitvec word_len := 0x00000000
-def x12 : bitvec word_len := 0x00000001
-def x13 : bitvec word_len := 0x00000000
-def x14 : bitvec word_len := 0x00000000
-def x15 : bitvec word_len := 0x00000000
+def x₀ : bitvec word_len := 0x00000001
+def x₁ : bitvec word_len := 0x00000000
+def x₂ : bitvec word_len := 0x00000000
+def x₃ : bitvec word_len := 0x00000000
+def x₄ : bitvec word_len := 0x00000001
+def x₅ : bitvec word_len := 0x00000000
+def x₆ : bitvec word_len := 0x00000000
+def x₇ : bitvec word_len := 0x00000000
+def x₈ : bitvec word_len := 0x00000001
+def x₉ : bitvec word_len := 0x00000000
+def x₁₀ : bitvec word_len := 0x00000000
+def x₁₁ : bitvec word_len := 0x00000000
+def x₁₂ : bitvec word_len := 0x00000001
+def x₁₃ : bitvec word_len := 0x00000000
+def x₁₄ : bitvec word_len := 0x00000000
+def x₁₅ : bitvec word_len := 0x00000000
 
--- y0
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 0).iget).to_nat
+def x : vector (bitvec word_len) 16 := 
+  [x₀, x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, x₁₃, x₁₄, x₁₅].to_vec_of_bitvec word_len 16
+
+-- y₀
+#eval ((columnround x).nth 0).to_nat
 #eval 0x10090288
 
--- y1
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 1).iget).to_nat
+-- y₁
+#eval ((columnround x).nth 1).to_nat
 #eval 0x00000000
 
--- y2
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 2).iget).to_nat
+-- y₂
+#eval ((columnround x).nth 2).to_nat
 #eval 0x00000000
 
--- y3
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 3).iget).to_nat
+-- y₃
+#eval ((columnround x).nth 3).to_nat
 #eval 0x00000000
 
--- y4
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 4).iget).to_nat
+-- y₄
+#eval ((columnround x).nth 4).to_nat
 #eval 0x00000101
 
--- y5
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 5).iget).to_nat
+-- y₅
+#eval ((columnround x).nth 5).to_nat
 #eval 0x00000000
 
--- y6
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 6).iget).to_nat
+-- y₆
+#eval ((columnround x).nth 6).to_nat
 #eval 0x00000000
 
--- y7
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 7).iget).to_nat
+-- y₇
+#eval ((columnround x).nth 7).to_nat
 #eval 0x00000000
 
--- y8
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 8).iget).to_nat
+-- y₈
+#eval ((columnround x).nth 8).to_nat
 #eval 0x00020401
 
--- y9
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 9).iget).to_nat
+-- y₉
+#eval ((columnround x).nth 9).to_nat
 #eval 0x00000000
 
--- y10
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 10).iget).to_nat
+-- y₁₀
+#eval ((columnround x).nth 10).to_nat
 #eval 0x00000000
 
--- y11
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 11).iget).to_nat
+-- y₁₁
+#eval ((columnround x).nth 11).to_nat
 #eval 0x00000000
 
--- y12
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 12).iget).to_nat
+-- y₁₂
+#eval ((columnround x).nth 12).to_nat
 #eval 0x40a04001
 
--- y13
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 13).iget).to_nat
+-- y₁₃
+#eval ((columnround x).nth 13).to_nat
 #eval 0x00000000
 
--- y14
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 14).iget).to_nat
+-- y₁₄
+#eval ((columnround x).nth 14).to_nat
 #eval 0x00000000
 
--- y15
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 15).iget).to_nat
+-- y₁₅
+#eval ((columnround x).nth 15).to_nat
 #eval 0x00000000
 
 end example5_1
@@ -149,85 +152,88 @@ end example5_1
 -- example 2
 namespace example5_2
 
-def x0 : bitvec word_len := 0x08521bd6
-def x1 : bitvec word_len := 0x1fe88837
-def x2 : bitvec word_len := 0xbb2aa576
-def x3 : bitvec word_len := 0x3aa26365
-def x4 : bitvec word_len := 0xc54c6a5b
-def x5 : bitvec word_len := 0x2fc74c2f
-def x6 : bitvec word_len := 0x6dd39cc3
-def x7 : bitvec word_len := 0xda0a64f6
-def x8 : bitvec word_len := 0x90a2f23d
-def x9 : bitvec word_len := 0x067f95a6
-def x10 : bitvec word_len := 0x06b35f61
-def x11 : bitvec word_len := 0x41e4732e
-def x12 : bitvec word_len := 0xe859c100
-def x13 : bitvec word_len := 0xea4d84b7
-def x14 : bitvec word_len := 0x0f619bff
-def x15 : bitvec word_len := 0xbc6e965a
+def x₀ : bitvec word_len := 0x08521bd6
+def x₁ : bitvec word_len := 0x1fe88837
+def x₂ : bitvec word_len := 0xbb2aa576
+def x₃ : bitvec word_len := 0x3aa26365
+def x₄ : bitvec word_len := 0xc54c6a5b
+def x₅ : bitvec word_len := 0x2fc74c2f
+def x₆ : bitvec word_len := 0x6dd39cc3
+def x₇ : bitvec word_len := 0xda0a64f6
+def x₈ : bitvec word_len := 0x90a2f23d
+def x₉ : bitvec word_len := 0x067f95a6
+def x₁₀ : bitvec word_len := 0x06b35f61
+def x₁₁ : bitvec word_len := 0x41e4732e
+def x₁₂ : bitvec word_len := 0xe859c100
+def x₁₃ : bitvec word_len := 0xea4d84b7
+def x₁₄ : bitvec word_len := 0x0f619bff
+def x₁₅ : bitvec word_len := 0xbc6e965a
 
--- y0
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 0).iget).to_nat
+def x : vector (bitvec word_len) 16 := 
+  [x₀, x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, x₁₃, x₁₄, x₁₅].to_vec_of_bitvec word_len 16
+
+-- y₀
+#eval ((columnround x).nth 0).to_nat
 #eval 0x8c9d190a
 
--- y1
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 1).iget).to_nat
+-- y₁
+#eval ((columnround x).nth 1).to_nat
 #eval 0xce8e4c90
 
--- y2
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 2).iget).to_nat
+-- y₂
+#eval ((columnround x).nth 2).to_nat
 #eval 0x1ef8e9d3
 
--- y3
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 3).iget).to_nat
+-- y₃
+#eval ((columnround x).nth 3).to_nat
 #eval 0x1326a71a
 
--- y4
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 4).iget).to_nat
+-- y₄
+#eval ((columnround x).nth 4).to_nat
 #eval 0x90a20123
 
--- y5
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 5).iget).to_nat
+-- y₅
+#eval ((columnround x).nth 5).to_nat
 #eval 0xead3c4f3
 
--- y6
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 6).iget).to_nat
+-- y₆
+#eval ((columnround x).nth 6).to_nat
 #eval 0x63a091a0
 
--- y7
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 7).iget).to_nat
+-- y₇
+#eval ((columnround x).nth 7).to_nat
 #eval 0xf0708d69
 
--- y8
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 8).iget).to_nat
+-- y₈
+#eval ((columnround x).nth 8).to_nat
 #eval 0x789b010c
 
--- y9
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 9).iget).to_nat
+-- y₉
+#eval ((columnround x).nth 9).to_nat
 #eval 0xd195a681
 
--- y10
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 10).iget).to_nat
+-- y₁₀
+#eval ((columnround x).nth 10).to_nat
 #eval 0xeb7d5504
 
--- y11
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 11).iget).to_nat
+-- y₁₁
+#eval ((columnround x).nth 11).to_nat
 #eval 0xa774135c
 
--- y12
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 12).iget).to_nat
+-- y₁₂
+#eval ((columnround x).nth 12).to_nat
 #eval 0x481c2027
 
--- y13
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 13).iget).to_nat
+-- y₁₃
+#eval ((columnround x).nth 13).to_nat
 #eval 0x53a8e4b5
 
--- y14
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 14).iget).to_nat
+-- y₁₄
+#eval ((columnround x).nth 14).to_nat
 #eval 0x4c1f89c5
 
--- y15
-#eval (((columnround x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15).nth 15).iget).to_nat
+-- y₁₅
+#eval ((columnround x).nth 15).to_nat
 #eval 0x3f78c9c8
 
 end example5_2
