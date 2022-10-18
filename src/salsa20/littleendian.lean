@@ -3,6 +3,7 @@
   http://cr.yp.to/snuffle/spec.pdf
 -/
 import salsa20.words
+open words
 
 namespace littleendian
 
@@ -43,37 +44,5 @@ lemma inv_undoes_littleendian (b0 b1 b2 b3 : bitvec byte_len) :
 begin
   sorry,
 end
-
-
-namespace examples
-
--- littleendian
-#eval (littleendian ([0, 0, 0, 0].to_vec_of_bitvec byte_len 4)).to_nat
-#eval 0x00000000
-
-#eval bitvec.to_nat (littleendian ([86, 75, 30, 9].to_vec_of_bitvec byte_len 4))
-#eval 0x091e4b56
-
-#eval bitvec.to_nat (littleendian ([255, 255, 255, 250].to_vec_of_bitvec byte_len 4))
-#eval 0xfaffffff
-
-#eval bitvec.to_nat (littleendian ([255, 255, 255, 255].to_vec_of_bitvec byte_len 4))
-#eval 0xffffffff
-
--- littleendian_inv
-
-#eval (littleendian_inv 0x00000000).to_list
-
-#eval 0x091e4b56
-#eval (littleendian_inv 0x091e4b56).to_list
-#eval ((littleendian_inv 0x091e4b56).nth 0).to_nat
-#eval ((littleendian_inv 0x091e4b56).nth 1).to_nat
-#eval ((littleendian_inv 0x091e4b56).nth 2).to_nat
-#eval ((littleendian_inv 0x091e4b56).nth 3).to_nat
-
-#eval (littleendian_inv 0xfaffffff).to_list
-
-
-end examples
 
 end littleendian

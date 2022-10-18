@@ -16,6 +16,8 @@ import tactics
 
 import to_mathlib
 
+namespace words
+
 -- A byte is a bitvec of 8 bits
 def byte_len : ℕ := 8
 -- A word is a bitvec of 32 bits
@@ -39,25 +41,9 @@ def mod_as_nat (sum : zmod mod) : ℕ := sum.val
 -- convert a nat to a bitvec
 def nat_as_bitvec (n : ℕ) : bitvec word_len := bitvec.of_nat word_len n
 
--- example from the spec: 0xc0a8787e + 0x9fd1161d = 0x60798e9b
-def u : bitvec word_len := 0xc0a8787e
-def v : bitvec word_len := 0x9fd1161d
-
-#eval (nat_as_bitvec (mod_as_nat (sum_as_mod u v))).to_nat
-#eval 0x60798e9b
-
 -- xor = just bitwise xor
-
 def xor' (v1 v2 : bitvec word_len): bitvec word_len :=
   v1.xor v2
-
--- example from the spec: 0xc0a8787e XOR 0x9fd1161d = 0x5f796e63
-def x1 : bitvec 32 := 0xc0a8787e
-def x2 : bitvec 32 := 0x9fd1161d
-
-#eval (xor' x1 x2).to_nat
-#eval 0x5f796e63
-
 
 -- rotation
 
@@ -83,17 +69,6 @@ do
   let a4 := a3.append (bit_n orig 3),
   let a5 := a4.append (bit_n orig 4),
   a5
-
--- example from the spec : 0xc0a8787e <<< 5 = 0x150f0fd8
-def v' : bitvec 32 := 0xc0a8787e
-def shift : ℕ := 5
-
-#eval (push5 v' (reduce_bitvector (shift_left v' 5) 27)).to_nat
-#eval 0x150f0fd8
-
-def rotate5 (input: bitvec 32) := (push5 input (reduce_bitvector (shift_left input 5) 27))
-#eval (rotate5 v').to_nat
-
 
 -- the quarterround function will require push7, push9, push13 and push18
 
@@ -167,3 +142,5 @@ do
   a18
 
 def rotate18 (input: bitvec 32) := (push18 input (reduce_bitvector (shift_left input 18) 14))
+
+end words
