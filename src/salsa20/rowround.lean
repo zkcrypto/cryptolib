@@ -34,33 +34,32 @@ def rowround4 (y₁₅ y₁₂ y₁₃ y₁₄ : bitvec word_len) : vector (bitv
 -- (z₁₅, z₁₂, z₁₃, z₁₄) = quarterround(y₁₅, y₁₂, y₁₃, y₁₄)
 def rowround (y : vector(bitvec word_len) 16) : vector (bitvec word_len) 16 :=
   do
-    let list1 := rowround1 (y.nth 0) (y.nth 1) (y.nth 2) (y.nth 3),
-    let list2 := rowround2 (y.nth 5) (y.nth 6) (y.nth 7) (y.nth 4),
-    let list3 := rowround3 (y.nth 10) (y.nth 11) (y.nth 8) (y.nth 9),
-    let list4 := rowround4 (y.nth 15) (y.nth 12) (y.nth 13) (y.nth 14),
+    let r1 := rowround1 (y.nth 0) (y.nth 1) (y.nth 2) (y.nth 3),
+    let r2 := rowround2 (y.nth 5) (y.nth 6) (y.nth 7) (y.nth 4),
+    let r3 := rowround3 (y.nth 10) (y.nth 11) (y.nth 8) (y.nth 9),
+    let r4 := rowround4 (y.nth 15) (y.nth 12) (y.nth 13) (y.nth 14),
 
-    let z₅ := list2.head,
-    let z₆ := list2.nth 1,
-    let z₇ := list2.nth 2,
-    let z₄ := list2.nth 3,
+    let z₀ := r1.head,
+    let z₁ := r1.nth 1,
+    let z₂ := r1.nth 2,
+    let z₃ := r1.nth 3,
 
-    let list2_sorted := [z₄, z₅, z₆, z₇].to_vec_of_bitvec word_len 4, 
+    let z₅ := r2.head,
+    let z₆ := r2.nth 1,
+    let z₇ := r2.nth 2,
+    let z₄ := r2.nth 3,
 
-    let z₁₀ := list3.head,
-    let z₁₁ := list3.nth 1,
-    let z₈ := list3.nth 2,
-    let z₉ := list3.nth 3,
+    let z₁₀ := r3.head,
+    let z₁₁ := r3.nth 1,
+    let z₈ := r3.nth 2,
+    let z₉ := r3.nth 3,
 
-    let list3_sorted := [z₈, z₉, z₁₀, z₁₁].to_vec_of_bitvec word_len 4,
+    let z₁₅ := r4.head,
+    let z₁₂ := r4.nth 1,
+    let z₁₃ := r4.nth 2,
+    let z₁₄ := r4.nth 3,
 
-    let z₁₅ := list4.head,
-    let z₁₂ := list4.nth 1,
-    let z₁₃ := list4.nth 2,
-    let z₁₄ := list4.nth 3,
-
-    let list4_sorted := [z₁₂, z₁₃, z₁₄, z₁₅].to_vec_of_bitvec word_len 4,
-    
-    ((list1.append list2_sorted).append list3_sorted).append list4_sorted
+    [z₀, z₁, z₂, z₃, z₄, z₅, z₆, z₇, z₈, z₉, z₁₀, z₁₁, z₁₂, z₁₃, z₁₄, z₁₅].to_vec_of_bitvec word_len 16
 
 lemma rowround_zero : 
   rowround ([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec word_len 16) = 

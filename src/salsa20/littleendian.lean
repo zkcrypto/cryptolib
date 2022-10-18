@@ -38,9 +38,7 @@ lemma littleendian_inv_zero :
   littleendian_inv 0 = ([0, 0, 0, 0].to_vec_of_bitvec byte_len 4) := rfl
 
 
-lemma inv_undoes_littleendian (b0 b1 b2 b3 : bitvec byte_len) : 
-  (littleendian_inv (littleendian ([b0, b1, b2, b3].to_vec_of_bitvec byte_len 4))).to_list = 
-    [b0, b1, b2, b3] :=
+lemma inv_undoes_littleendian (b : vector (bitvec byte_len) 4) : littleendian_inv (littleendian b) = b :=
 begin
   sorry,
 end
