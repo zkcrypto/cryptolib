@@ -68,7 +68,7 @@ namespace quarterround
 namespace example1
 
 def y : (vector (bitvec word_len) 4) := 
-  [0x00000000, 0x00000000, 0x00000000, 0x00000000].to_vec_of_bitvec word_len 4
+  subtype.mk [0x00000000, 0x00000000, 0x00000000, 0x00000000] (by refl)
 
 example : (z₁ y).to_nat = 0x00000000 := by refl
 example : (z₂ y).to_nat = 0x00000000 := by refl
@@ -81,7 +81,7 @@ end example1
 namespace example2
 
 def y : (vector (bitvec word_len) 4) := 
-  [0x00000001, 0x00000000, 0x00000000, 0x00000000].to_vec_of_bitvec word_len 4
+  subtype.mk [0x00000001, 0x00000000, 0x00000000, 0x00000000] (by refl)
 
 #eval (z₁ y).to_nat
 #eval 0x00000080
@@ -105,7 +105,7 @@ end example2
 namespace example3
 
 def y : (vector (bitvec word_len) 4) := 
-  [0x00000000, 0x00000001, 0x00000000, 0x00000000].to_vec_of_bitvec word_len 4
+  subtype.mk [0x00000000, 0x00000001, 0x00000000, 0x00000000] (by refl)
 
 #eval (z₁ y).to_nat
 #eval 0x00000001
@@ -134,7 +134,7 @@ def y2 : bitvec word_len := 0x00000001
 def y3 : bitvec word_len := 0x00000000
 
 def y : (vector (bitvec word_len) 4) := 
-  [0x00000000, 0x00000000, 0x00000001, 0x00000000].to_vec_of_bitvec word_len 4
+  subtype.mk [0x00000000, 0x00000000, 0x00000001, 0x00000000] (by refl)
 
 #eval (z₁ y).to_nat
 #eval 0x00000000
@@ -158,7 +158,7 @@ end example4
 namespace example5
 
 def y : (vector (bitvec word_len) 4) := 
-  [0x00000000, 0x00000000, 0x00000000, 0x00000001].to_vec_of_bitvec word_len 4
+  subtype.mk [0x00000000, 0x00000000, 0x00000000, 0x00000001] (by refl)
 
 #eval (z₁ y).to_nat
 #eval 0x00000080
@@ -182,7 +182,7 @@ end example5
 namespace example6
 
 def y : (vector (bitvec word_len) 4) := 
-  [0xe7e8c006, 0xc4f9417d, 0x6479b4b2, 0x68c67137].to_vec_of_bitvec word_len 4
+  subtype.mk [0xe7e8c006, 0xc4f9417d, 0x6479b4b2, 0x68c67137] (by refl)
 
 #eval (z₁ y).to_nat
 #eval 0x9361dfd5
@@ -206,7 +206,7 @@ end example6
 namespace example7
 
 def y : (vector (bitvec word_len) 4) := 
-  [0xd3917c5b, 0x55f1c407, 0x52a58a7a, 0x8f887a3b].to_vec_of_bitvec word_len 4
+  subtype.mk [0xd3917c5b, 0x55f1c407, 0x52a58a7a, 0x8f887a3b] (by refl)
 
 #eval (z₁ y).to_nat
 #eval 0xd90a8f36
@@ -253,7 +253,7 @@ def y₁₄ : bitvec word_len := 0x00000000
 def y₁₅ : bitvec word_len := 0x00000000
 
 def y : vector (bitvec word_len) 16 := 
-  [y₀, y₁, y₂, y₃, y₄, y₅, y₆, y₇, y₈, y₉, y₁₀, y₁₁, y₁₂, y₁₃, y₁₄, y₁₅].to_vec_of_bitvec word_len 16
+  subtype.mk [y₀, y₁, y₂, y₃, y₄, y₅, y₆, y₇, y₈, y₉, y₁₀, y₁₁, y₁₂, y₁₃, y₁₄, y₁₅] (by refl)
 
 -- z₀
 #eval ((rowround y).nth 0).to_nat
@@ -342,7 +342,7 @@ def y₁₄ : bitvec word_len := 0x0f619bff
 def y₁₅ : bitvec word_len := 0xbc6e965a
 
 def y : vector (bitvec word_len) 16 := 
-  [y₀, y₁, y₂, y₃, y₄, y₅, y₆, y₇, y₈, y₉, y₁₀, y₁₁, y₁₂, y₁₃, y₁₄, y₁₅].to_vec_of_bitvec word_len 16
+  subtype.mk [y₀, y₁, y₂, y₃, y₄, y₅, y₆, y₇, y₈, y₉, y₁₀, y₁₁, y₁₂, y₁₃, y₁₄, y₁₅] (by refl)
 
 -- z₀
 #eval ((rowround y).nth 0).to_nat
@@ -437,7 +437,7 @@ def x₁₄ : bitvec word_len := 0x00000000
 def x₁₅ : bitvec word_len := 0x00000000
 
 def x : vector (bitvec word_len) 16 := 
-  [x₀, x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, x₁₃, x₁₄, x₁₅].to_vec_of_bitvec word_len 16
+  subtype.mk [x₀, x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, x₁₃, x₁₄, x₁₅] (by refl)
 
 -- y₀
 #eval ((columnround x).nth 0).to_nat
@@ -526,7 +526,7 @@ def x₁₄ : bitvec word_len := 0x0f619bff
 def x₁₅ : bitvec word_len := 0xbc6e965a
 
 def x : vector (bitvec word_len) 16 := 
-  [x₀, x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, x₁₃, x₁₄, x₁₅].to_vec_of_bitvec word_len 16
+  subtype.mk [x₀, x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, x₁₃, x₁₄, x₁₅] (by refl)
 
 -- y₀
 #eval ((columnround x).nth 0).to_nat
@@ -621,7 +621,7 @@ def x₁₄ : bitvec word_len := 0x00000000
 def x₁₅ : bitvec word_len := 0x00000000
 
 def x : vector (bitvec word_len) 16 := 
-  [x₀, x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, x₁₃, x₁₄, x₁₅].to_vec_of_bitvec word_len 16
+  subtype.mk [x₀, x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, x₁₃, x₁₄, x₁₅] (by refl)
 
 -- double₀
 #eval ((doubleround x).nth 0).to_nat
@@ -710,7 +710,7 @@ def x₁₄ : bitvec word_len := 0xd9421b6d
 def x₁₅ : bitvec word_len := 0x67b276c1
 
 def x : vector (bitvec word_len) 16 := 
-  [x₀, x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, x₁₃, x₁₄, x₁₅].to_vec_of_bitvec word_len 16
+  subtype.mk [x₀, x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, x₁₃, x₁₄, x₁₅] (by refl)
 
 -- double₀
 #eval ((doubleround x).nth 0).to_nat
@@ -787,16 +787,16 @@ namespace littleendian
 
 -- littleendian
 
-#eval (littleendian ([0, 0, 0, 0].to_vec_of_bitvec byte_len 4)).to_nat
+#eval (littleendian (subtype.mk [0, 0, 0, 0] (by refl))).to_nat
 #eval 0x00000000
 
-#eval bitvec.to_nat (littleendian ([86, 75, 30, 9].to_vec_of_bitvec byte_len 4))
+#eval bitvec.to_nat (littleendian (subtype.mk [86, 75, 30, 9] (by refl)))
 #eval 0x091e4b56
 
-#eval bitvec.to_nat (littleendian ([255, 255, 255, 250].to_vec_of_bitvec byte_len 4))
+#eval bitvec.to_nat (littleendian (subtype.mk [255, 255, 255, 250] (by refl)))
 #eval 0xfaffffff
 
-#eval bitvec.to_nat (littleendian ([255, 255, 255, 255].to_vec_of_bitvec byte_len 4))
+#eval bitvec.to_nat (littleendian (subtype.mk [255, 255, 255, 255] (by refl)))
 #eval 0xffffffff
 
 -- littleendian_inv
@@ -820,43 +820,43 @@ namespace salsa20
 
 
 #eval if salsa20
-  (list.to_vec_of_bitvec byte_len 64 [
+  (subtype.mk [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-  ]) = list.to_vec_of_bitvec byte_len 64 [
+  ] (by refl)) = subtype.mk [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-  ] then tt else ff
+  ] (by refl) then tt else ff
 
 #eval
-  if salsa20 (list.to_vec_of_bitvec byte_len 64 [
+  if salsa20 (subtype.mk [
     211, 159, 13, 115, 76, 55, 82, 183, 3, 117, 222, 37, 191, 187, 234, 136,
     49, 237, 179, 48, 1, 106, 178, 219, 175, 199, 166, 48, 86, 16, 179, 207,
     31, 240, 32, 63, 15, 83, 93, 161, 116, 147, 48, 113, 238, 55, 204, 36,
     79, 201, 235, 79, 3, 81, 156, 47, 203, 26, 244, 243, 88, 118, 104, 54
-  ]) = list.to_vec_of_bitvec byte_len 64 [
+  ] (by refl)) = subtype.mk [
     109, 42, 178, 168, 156, 240, 248, 238,  168, 196, 190, 203, 26, 110, 170, 154,
     29, 29, 150, 26, 150, 30, 235, 249,  190, 163, 251, 48, 69, 144, 51, 57,
     118, 40, 152, 157, 180, 57, 27, 94, 107, 42, 236, 35, 27, 111, 114, 114,
     219, 236, 232, 135, 111, 155, 110, 18, 24, 232, 95, 158, 179, 19, 48, 202
-  ] then tt else ff
+  ] (by refl) then tt else ff
 
 #eval
-  if salsa20 (list.to_vec_of_bitvec byte_len 64 [
+  if salsa20 (subtype.mk [
     88, 118, 104, 54, 79, 201, 235, 79, 3, 81, 156, 47, 203, 26, 244, 243,
     191, 187, 234, 136, 211, 159, 13, 115, 76, 55, 82, 183, 3, 117, 222, 37,
     86, 16, 179, 207, 49, 237, 179, 48, 1, 106, 178, 219, 175, 199, 166, 48,
     238, 55,204, 36, 31, 240, 32, 63, 15, 83, 93, 161, 116, 147, 48,113
-  ]) = list.to_vec_of_bitvec byte_len 64 [
+  ] (by refl)) = subtype.mk [
     179, 19, 48, 202, 219, 236, 232, 135, 111, 155, 110, 18, 24, 232, 95, 158,
     26, 110, 170, 154, 109, 42, 178, 168, 156, 240, 248, 238, 168, 196, 190, 203,
     69, 144, 51, 57, 29, 29, 150, 26, 150, 30, 235, 249, 190, 163, 251, 48,
     27, 111, 114, 114, 118, 40, 152, 157, 180, 57, 27, 94, 107, 42, 236, 35
-  ] then tt else ff
+  ] (by refl) then tt else ff
 
 
 end  salsa20
@@ -867,15 +867,15 @@ namespace salsa20_expansion
 
 -- k₀ = (1, 2, 3, 4, 5, ... , 16)
 def test_k₀ : vector (bitvec byte_len) 16 :=
-  ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].to_vec_of_bitvec byte_len 16)
+  (subtype.mk [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] (by refl))
 
 -- k₁ = (201, 202, 203, 204, 205, ... , 216)
 def test_k₁ : vector (bitvec byte_len) 16 :=
-  ([201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216].to_vec_of_bitvec byte_len 16)
+  (subtype.mk [201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216] (by refl))
 
 -- n = (101, 102, 103, 104, 105, ... , 116)
 def test_n : vector (bitvec byte_len) 16 :=
-  ([101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116].to_vec_of_bitvec byte_len 16)
+  (subtype.mk [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116] (by refl))
 
 def res1 : list (bitvec byte_len) := [
   69, 37, 68, 39, 41, 15, 107, 193, 255, 139, 122, 6, 170, 233, 217, 98,
@@ -927,13 +927,13 @@ end xor
 section example1
 
 def e1_k₁ : vector (bitvec byte_len) 16 := 
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec byte_len 16
+  subtype.mk [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] (by refl)
 
 def e1_k₂ : vector (bitvec byte_len) 16 := 
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec byte_len 16
+  subtype.mk [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] (by refl)
 
 def e1_nonce : vector (bitvec byte_len) 16 := 
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec byte_len 16
+  subtype.mk [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] (by refl)
 
 def e1_message : list (bitvec byte_len) := 
   [0, 0, 0, 0]
@@ -945,16 +945,16 @@ end example1
 section example2
 
 def e2_k₁ : vector (bitvec byte_len) 16 := 
-  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].to_vec_of_bitvec byte_len 16
+  subtype.mk [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] (by refl)
 
 def e2_k₂ : vector (bitvec byte_len) 16 := 
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec byte_len 16
+  subtype.mk [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] (by refl)
 
 def e2_nonce : vector (bitvec byte_len) 16 := 
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec byte_len 16
+  subtype.mk [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] (by refl)
 
 def e2_message : list (bitvec byte_len) := 
-  [H, O, L, A]
+  [ascii.H, ascii.O, ascii.L, ascii.A]
 
 -- encryption
 

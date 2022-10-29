@@ -12,19 +12,19 @@ namespace columnround
 
 -- (y₀, y₄, y₈, y₁₂) = quarterround(x₀, x₄, x₈, x₁₂)
 def columnround1 (x₀ x₄ x₈ x₁₂ : bitvec word_len) : vector (bitvec word_len) 4 := 
-  quarterround ([x₀, x₄, x₈, x₁₂].to_vec_of_bitvec word_len 4)
+  quarterround (subtype.mk [x₀, x₄, x₈, x₁₂] (by refl))
 
 -- (y₅, y₉, y₁₃, y₁) = quarterround(x₅, x₉, x₁₃, x₁)
 def columnround2 (x₅ x₉ x₁₃ x₁ : bitvec word_len) : vector (bitvec word_len) 4 := 
-  quarterround ([x₅, x₉, x₁₃, x₁].to_vec_of_bitvec word_len 4)
+  quarterround (subtype.mk [x₅, x₉, x₁₃, x₁] (by refl))
 
 -- (y₁₀, y₁₄, y₂, y₆) = quarterround(x₁₀, x₁₄, x₂, x₆)
 def columnround3 (x₁₀ x₁₄ x₂ x₆ : bitvec word_len) : vector (bitvec word_len) 4 := 
-  quarterround ([x₁₀, x₁₄, x₂, x₆].to_vec_of_bitvec word_len 4)
+  quarterround (subtype.mk [x₁₀, x₁₄, x₂, x₆] (by refl))
 
 -- (y₁₅, y₃, y₇, y₁₁) = quarterround(x₁₅, x₃, x₇, x₁₁)
 def columnround4 (x₁₅ x₃ x₇ x₁₁ : bitvec word_len) : vector (bitvec word_len) 4 := 
-  quarterround ([x₁₅, x₃, x₇, x₁₁].to_vec_of_bitvec word_len 4)
+  quarterround (subtype.mk [x₁₅, x₃, x₇, x₁₁] (by refl))
 
 -- If x = (x₀, x₁, x₂, x₃, ... , x₁₅) then 
 -- columnround(x) = (y₀, y₁, y₂, y₃, ... , y₁₅) where
@@ -60,11 +60,11 @@ def columnround
     let y₇ := c4.nth 2,
     let y₁₁ := c4.nth 3,
 
-    [y₀, y₁, y₂, y₃, y₄, y₅, y₆, y₇, y₈, y₉, y₁₀, y₁₁, y₁₂, y₁₃, y₁₄, y₁₅].to_vec_of_bitvec word_len 16
+    subtype.mk [y₀, y₁, y₂, y₃, y₄, y₅, y₆, y₇, y₈, y₉, y₁₀, y₁₁, y₁₂, y₁₃, y₁₄, y₁₅] (by refl)
 
 lemma columnround_zero : 
-  columnround ([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec word_len 16) = 
-    [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0].to_vec_of_bitvec word_len 16 := rfl
+  columnround (subtype.mk [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] (by refl)) = 
+    subtype.mk [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0] (by refl) := rfl
 
 -- TODO: equivalent formula
 -- TODO: matrix form

@@ -18,7 +18,7 @@ def littleendian (b : vector (bitvec byte_len) 4) : bitvec word_len :=
   )
 
 lemma littleendian_zero :
-  (littleendian ([0, 0, 0, 0].to_vec_of_bitvec byte_len 4)).to_nat = 0 := rfl
+  (littleendian (subtype.mk [0, 0, 0, 0] (by refl))).to_nat = 0 := rfl
 
 -- The inverse of little-endian is indeed the function that sends a word (32 bits) 
 -- back to the sequence of 4 bytes in a little endian way, so the least significant
@@ -27,15 +27,15 @@ lemma littleendian_zero :
 --
 -- https://crypto.stackexchange.com/a/22314
 def littleendian_inv (w : bitvec word_len) : vector (bitvec byte_len) 4 :=
-  [
+  subtype.mk [
     bitvec.of_nat byte_len (bitvec.to_nat((bitvec.and w 0xff))),
     bitvec.of_nat byte_len (bitvec.to_nat(((bitvec.ushr w 8).and 0xff))),
     bitvec.of_nat byte_len (bitvec.to_nat(((bitvec.ushr w 16).and 0xff))), 
     bitvec.of_nat byte_len (bitvec.to_nat(((bitvec.ushr w 24).and 0xff)))
-  ].to_vec_of_bitvec byte_len 4
+  ] (by refl)
 
 lemma littleendian_inv_zero :
-  littleendian_inv 0 = ([0, 0, 0, 0].to_vec_of_bitvec byte_len 4) := rfl
+  littleendian_inv 0 = (subtype.mk [0, 0, 0, 0] (by refl)) := rfl
 
 
 lemma inv_undoes_littleendian (b : vector (bitvec byte_len) 4) : littleendian_inv (littleendian b) = b :=

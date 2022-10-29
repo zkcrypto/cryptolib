@@ -26,11 +26,11 @@ def z₀ (y : vector (bitvec word_len) 4) : bitvec word_len :=
 
 -- quarterround(y = y₀, y₁, y₂, y₃) = (z₀, z₁, z₂, z₃)
 def quarterround (y : vector (bitvec word_len) 4) : vector (bitvec word_len) 4 :=
-    [z₀ y, z₁ y, z₂ y, z₃ y].to_vec_of_bitvec word_len 4
+    subtype.mk [z₀ y, z₁ y, z₂ y, z₃ y] (by refl)
 
 -- quarterround(0, 0, 0, 0) = [0, 0, 0, 0]
 lemma quarterround_zero : 
-  (quarterround ([0, 0, 0, 0].to_vec_of_bitvec word_len 4)).to_list = [0, 0, 0, 0] := rfl
+  (quarterround (subtype.mk [0, 0, 0, 0] (by refl))).to_list = [0, 0, 0, 0] := rfl
 
 -- TODO: The whole quarterround function is invertible
 def quarterround_inv (z : vector (bitvec word_len) 4) : vector (bitvec word_len) 4 :=
