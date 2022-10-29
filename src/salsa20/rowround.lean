@@ -12,19 +12,19 @@ namespace rowround
 
 -- (z₀, z₁, z₂, z₃) = quarterround(y₀, y₁, y₂, y₃)
 def rowround1 (y₀ y₁ y₂ y₃ : bitvec word_len) : vector (bitvec word_len) 4 := 
-  quarterround ([y₀, y₁, y₂, y₃].to_vec_of_bitvec word_len 4)
+  quarterround (subtype.mk [y₀, y₁, y₂, y₃] (by refl))
 
 -- (z₅, z₆, z₇, z₄) = quarterround(y₅, y₆, y₇, y₄)
 def rowround2 (y₅ y₆ y₇ y₄ : bitvec word_len) : vector (bitvec word_len) 4 := 
-  quarterround ([y₅, y₆, y₇, y₄].to_vec_of_bitvec word_len 4)
+  quarterround (subtype.mk [y₅, y₆, y₇, y₄] (by refl))
 
 -- (z₁₀, z₁₁, z₈, z₉) = quarterround(y₁₀, y₁₁, y₈, y₉)
 def rowround3 (y₁₀ y₁₁ y₈ y₉ : bitvec word_len) : vector (bitvec word_len) 4 := 
-  quarterround ([y₁₀, y₁₁, y₈, y₉].to_vec_of_bitvec word_len 4)
+  quarterround (subtype.mk [y₁₀, y₁₁, y₈, y₉] (by refl))
 
 -- (z₁₅, z₁₂, z₁₃, z₁₄) = quarterround(y₁₅, y₁₂, y₁₃, y₁₄)
 def rowround4 (y₁₅ y₁₂ y₁₃ y₁₄ : bitvec word_len) : vector (bitvec word_len) 4 := 
-  quarterround ([y₁₅, y₁₂, y₁₃, y₁₄].to_vec_of_bitvec word_len 4)
+  quarterround (subtype.mk  [y₁₅, y₁₂, y₁₃, y₁₄] (by refl))
 
 -- If y = (y₀, y₁, y₂, y₃, ... , y₁₅) then 
 -- rowround(y) = (z₀, z₁, z₂, z₃, ... , z₁₅) where
@@ -59,11 +59,11 @@ def rowround (y : vector(bitvec word_len) 16) : vector (bitvec word_len) 16 :=
     let z₁₃ := r4.nth 2,
     let z₁₄ := r4.nth 3,
 
-    [z₀, z₁, z₂, z₃, z₄, z₅, z₆, z₇, z₈, z₉, z₁₀, z₁₁, z₁₂, z₁₃, z₁₄, z₁₅].to_vec_of_bitvec word_len 16
+    subtype.mk [z₀, z₁, z₂, z₃, z₄, z₅, z₆, z₇, z₈, z₉, z₁₀, z₁₁, z₁₂, z₁₃, z₁₄, z₁₅] (by refl)
 
 lemma rowround_zero : 
-  rowround ([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec word_len 16) = 
-    [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0].to_vec_of_bitvec word_len 16 := rfl
+  rowround (subtype.mk [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] (by refl)) = 
+    subtype.mk  [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0] (by refl) := rfl
 
 -- TODO: matrix form
 

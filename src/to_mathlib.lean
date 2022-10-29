@@ -170,35 +170,35 @@ namespace ascii
 
 -- https://www.rapidtables.com/code/text/ascii-table.html
 
-notation `A`          := 0b01000001 -- 65
-notation `B`          := 0b01000010 -- 66
-notation `C`          := 0b01000011 -- 67
-notation `D`          := 0b01000100 -- 68
-notation `E`          := 0b01000101 -- 69
-notation `F`          := 0b01000110 -- 70
-notation `G`          := 0b01000111 -- 71
-notation `H`          := 0b01001000 -- 72
-notation `I`          := 0b01001001 -- 73
-notation `J`          := 0b01001010 -- 74
-notation `K`          := 0b01001011 -- 75
-notation `L`          := 0b01001100 -- 76
-notation `M`          := 0b01001101 -- 77
-notation `N`          := 0b01001110 -- 78
-notation `O`          := 0b01001111 -- 79
-notation `P`          := 0b01010000 -- 80
-notation `Q`          := 0b01010001 -- 81
-notation `R`          := 0b01010010 -- 82
-notation `S`          := 0b01010011 -- 83
-notation `T`          := 0b01010100 -- 84
-notation `U`          := 0b01010101 -- 85
-notation `V`          := 0b01010110 -- 86
-notation `W`          := 0b01010111 -- 87
-notation `X`          := 0b01011000 -- 88
-notation `Y`          := 0b01011001 -- 89
-notation `Z`          := 0b01011010 -- 90
+notation `ascii.A`          := 0b01000001 -- 65
+notation `ascii.B`          := 0b01000010 -- 66
+notation `ascii.C`          := 0b01000011 -- 67
+notation `ascii.D`          := 0b01000100 -- 68
+notation `ascii.E`          := 0b01000101 -- 69
+notation `ascii.F`          := 0b01000110 -- 70
+notation `ascii.G`          := 0b01000111 -- 71
+notation `ascii.H`          := 0b01001000 -- 72
+notation `ascii.I`          := 0b01001001 -- 73
+notation `ascii.J`          := 0b01001010 -- 74
+notation `ascii.K`          := 0b01001011 -- 75
+notation `ascii.L`          := 0b01001100 -- 76
+notation `ascii.M`          := 0b01001101 -- 77
+notation `ascii.N`          := 0b01001110 -- 78
+notation `ascii.O`          := 0b01001111 -- 79
+notation `ascii.P`          := 0b01010000 -- 80
+notation `ascii.Q`          := 0b01010001 -- 81
+notation `ascii.R`          := 0b01010010 -- 82
+notation `ascii.S`          := 0b01010011 -- 83
+notation `ascii.T`          := 0b01010100 -- 84
+notation `ascii.U`          := 0b01010101 -- 85
+notation `ascii.V`          := 0b01010110 -- 86
+notation `ascii.W`          := 0b01010111 -- 87
+notation `ascii.X`          := 0b01011000 -- 88
+notation `ascii.Y`          := 0b01011001 -- 89
+notation `ascii.Z`          := 0b01011010 -- 90
 
-notation `[space]`    := 0b00100000 -- 32
-notation `[period]`   := 0b00101110 -- 46
+notation `ascii.[space]`    := 0b00100000 -- 32
+notation `ascii.[period]`   := 0b00101110 -- 46
 
 
 end ascii

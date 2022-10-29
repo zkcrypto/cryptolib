@@ -19,7 +19,7 @@ def doubleround(x : vector (bitvec word_len) 16) : vector (bitvec word_len) 16 :
   rowround y
 
 lemma doubleround_zero : 
-  doubleround ([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec word_len 16) = 
-    [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0].to_vec_of_bitvec word_len 16 := rfl
+  doubleround (subtype.mk [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] (by refl)) = 
+    subtype.mk [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0] (by refl) := rfl
 
 end doubleround

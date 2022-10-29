@@ -10,28 +10,28 @@ open words
 namespace salsa20_expansion
 
 -- σ₀ = (101, 120, 112, 97)
-def σ₀ : vector (bitvec byte_len) 4 := ([101, 120, 112, 97].to_vec_of_bitvec byte_len 4)
+def σ₀ : vector (bitvec byte_len) 4 := (subtype.mk [101, 120, 112, 97] (by refl))
 
 -- σ₁ = (110, 100, 32, 51)
-def σ₁ : vector (bitvec byte_len) 4 := ([110, 100, 32, 51].to_vec_of_bitvec byte_len 4)
+def σ₁ : vector (bitvec byte_len) 4 := (subtype.mk [110, 100, 32, 51] (by refl))
 
 -- σ₂ = (50, 45, 98, 121)
-def σ₂ : vector (bitvec byte_len) 4 := ([50, 45, 98, 121].to_vec_of_bitvec byte_len 4)
+def σ₂ : vector (bitvec byte_len) 4 := (subtype.mk [50, 45, 98, 121] (by refl))
 
 -- σ₃ = (116, 101, 32, 107)
-def σ₃ : vector (bitvec byte_len) 4 := ([116, 101, 32, 107].to_vec_of_bitvec byte_len 4)
+def σ₃ : vector (bitvec byte_len) 4 := (subtype.mk [116, 101, 32, 107] (by refl))
 
 -- τ₀ = (101, 120, 112, 97)
-def τ₀ : vector (bitvec byte_len) 4 := ([101, 120, 112, 97].to_vec_of_bitvec byte_len 4)
+def τ₀ : vector (bitvec byte_len) 4 := (subtype.mk [101, 120, 112, 97] (by refl))
 
 -- τ₁ = (110, 100, 32, 49)
-def τ₁ : vector (bitvec byte_len) 4 := ([110, 100, 32, 49].to_vec_of_bitvec byte_len 4)
+def τ₁ : vector (bitvec byte_len) 4 := (subtype.mk [110, 100, 32, 49] (by refl))
 
 -- τ₂ = (54, 45, 98, 121)
-def τ₂ : vector (bitvec byte_len) 4 := ([54, 45, 98, 121].to_vec_of_bitvec byte_len 4)
+def τ₂ : vector (bitvec byte_len) 4 := (subtype.mk [54, 45, 98, 121] (by refl))
 
 -- τ₃ = (116, 101, 32, 107)
-def τ₃ : vector (bitvec byte_len) 4 := ([116, 101, 32, 107].to_vec_of_bitvec byte_len 4)
+def τ₃ : vector (bitvec byte_len) 4 := (subtype.mk [116, 101, 32, 107] (by refl))
 
 -- If k₀, k₁, n are 16-byte sequences then Salsa20ₖ₀,ₖ₁(n) = Salsa20 (σ₀, k₀, σ1₁, n, σ₂, k₁, σ₃)
 def salsa20_expansion_v1 (k₀ : vector (bitvec byte_len) 16)
