@@ -18,6 +18,7 @@ import salsa20.doubleround
 import salsa20.littleendian
 import salsa20.salsa20
 import salsa20.salsa20_expansion
+import salsa20.salsa20_encryption
 
 open words
 open quarterround
@@ -27,6 +28,7 @@ open doubleround
 open littleendian
 open salsa20
 open salsa20_expansion
+open salsa20_encryption
 
 namespace examples
 
@@ -51,11 +53,8 @@ def x2 : bitvec 32 := 0x9fd1161d
 def v' : bitvec 32 := 0xc0a8787e
 def shift : ℕ := 5
 
-#eval (push5 v' (reduce_bitvector (shift_left v' 5) 27)).to_nat
+#eval (rotl v' shift).to_nat
 #eval 0x150f0fd8
-
-def rotate5 (input: bitvec 32) := (push5 input (reduce_bitvector (shift_left input 5) 27))
-#eval (rotate5 v').to_nat
 
 
 end words
@@ -898,6 +897,85 @@ def res2 : list(bitvec byte_len) := [
 
 
 end salsa20_expansion
+
+
+namespace salsa20_encryption
+
+
+end salsa20_encryption
+
+namespace xor
+
+-- why just 1 zero?
+#eval xor_2_lists [1, 2, 3, 4] [1, 2, 3, 4]
+
+#eval xor_2_lists [299, 26, 142, 41] (
+  [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+    11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 20,
+    31, 32, 34, 34, 35, 36, 37, 38, 39, 40,
+    41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+    51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+    61, 62, 63, 64
+  ])
+
+
+end xor
+
+
+section example1
+
+def e1_k₁ : vector (bitvec byte_len) 16 := 
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec byte_len 16
+
+def e1_k₂ : vector (bitvec byte_len) 16 := 
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec byte_len 16
+
+def e1_nonce : vector (bitvec byte_len) 16 := 
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec byte_len 16
+
+def e1_message : list (bitvec byte_len) := 
+  [0, 0, 0, 0]
+
+#eval salsa20_encrypt e1_k₁ e1_k₂ e1_message e1_nonce
+
+end example1
+
+section example2
+
+def e2_k₁ : vector (bitvec byte_len) 16 := 
+  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].to_vec_of_bitvec byte_len 16
+
+def e2_k₂ : vector (bitvec byte_len) 16 := 
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec byte_len 16
+
+def e2_nonce : vector (bitvec byte_len) 16 := 
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].to_vec_of_bitvec byte_len 16
+
+def e2_message : list (bitvec byte_len) := 
+  [H, O, L, A]
+
+-- encryption
+
+#eval salsa20_encrypt e2_k₁ e2_k₂ e2_message e2_nonce
+
+#eval ((salsa20_encrypt e2_k₁ e2_k₂ e2_message e2_nonce).nth 0).iget.to_nat
+#eval ((salsa20_encrypt e2_k₁ e2_k₂ e2_message e2_nonce).nth 1).iget.to_nat
+#eval ((salsa20_encrypt e2_k₁ e2_k₂ e2_message e2_nonce).nth 2).iget.to_nat
+#eval ((salsa20_encrypt e2_k₁ e2_k₂ e2_message e2_nonce).nth 3).iget.to_nat
+
+-- decryption
+
+#eval salsa20_encrypt e2_k₁ e2_k₂ (salsa20_encrypt e2_k₁ e2_k₂ e2_message e2_nonce) e2_nonce
+
+#eval ((salsa20_encrypt e2_k₁ e2_k₂ (salsa20_encrypt e2_k₁ e2_k₂ e2_message e2_nonce) e2_nonce).nth 0).iget.to_nat
+#eval ((salsa20_encrypt e2_k₁ e2_k₂ (salsa20_encrypt e2_k₁ e2_k₂ e2_message e2_nonce) e2_nonce).nth 1).iget.to_nat
+#eval ((salsa20_encrypt e2_k₁ e2_k₂ (salsa20_encrypt e2_k₁ e2_k₂ e2_message e2_nonce) e2_nonce).nth 2).iget.to_nat
+#eval ((salsa20_encrypt e2_k₁ e2_k₂ (salsa20_encrypt e2_k₁ e2_k₂ e2_message e2_nonce) e2_nonce).nth 3).iget.to_nat
+
+
+end example2
 
 
 end examples

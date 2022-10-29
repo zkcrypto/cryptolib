@@ -67,51 +67,22 @@ def x₁₅ : bitvec word_len := littleendian ([(x.nth 60), (x.nth 61), (x.nth 6
 def doubleround_exp_n : 
   ℕ → vector (bitvec word_len) 64 → vector (bitvec word_len) 64
 | 0 v := v
-| (n+1) v := do {
-    
-    let w₀ := (v.nth 0),
-    let w₁ := (v.nth 1),
-    let w₂ := (v.nth 2),
-    let w₃ := (v.nth 3),
-    let w₄ := (v.nth 4),
-    let w₅ := (v.nth 5),
-    let w₆ := (v.nth 6),
-    let w₇ := (v.nth 7),
-    let w₈ := (v.nth 8),
-    let w₉ := (v.nth 9),
-    let w₁₀ := (v.nth 10),
-    let w₁₁ := (v.nth 11),
-    let w₁₂ := (v.nth 12),
-    let w₁₃ := (v.nth 13),
-    let w₁₄ := (v.nth 14),
-    let w₁₅ := (v.nth 15),
-
+| (n+1) v := do
     let round := 
-      doubleround ([w₀, w₁, w₂, w₃, w₄, w₅, w₆, w₇, w₈, w₉, w₁₀, w₁₁, w₁₂, w₁₃, w₁₄, w₁₅].to_vec_of_bitvec word_len 16),
+      doubleround (
+        [
+          (v.nth 0), (v.nth 1), (v.nth 2), (v.nth 3), (v.nth 4), (v.nth 5), (v.nth 6), (v.nth 7),
+          (v.nth 8), (v.nth 9), (v.nth 10), (v.nth 11), (v.nth 12), (v.nth 13), (v.nth 14), (v.nth 15)
+        ]
+         .to_vec_of_bitvec word_len 16),
 
-    let round_as_list := round.to_list,
-    doubleround_exp_n (n) (list.to_vec_of_bitvec word_len 64 round_as_list)
-}
+    doubleround_exp_n (n) (list.to_vec_of_bitvec word_len 64 round.to_list)
 
 -- (z₀, z₁, ... , z₁₅) = doubleround¹⁰(x₀, x₁, ... , x₁₅)
 def z : vector (bitvec word_len) 64 := 
   doubleround_exp_n 10 (list.to_vec_of_bitvec word_len 64 [
-    x₀ x,
-    x₁ x,
-    x₂ x,
-    x₃ x,
-    x₄ x,
-    x₅ x,
-    x₆ x,
-    x₇ x,
-    x₈ x,
-    x₉ x,
-    x₁₀ x,
-    x₁₁ x,
-    x₁₂ x,
-    x₁₃ x,
-    x₁₄ x,
-    x₁₅ x
+    x₀ x, x₁ x, x₂ x, x₃ x, x₄ x, x₅ x, x₆ x, x₇ x, 
+    x₈ x, x₉ x,x₁₀ x, x₁₁ x, x₁₂ x, x₁₃ x, x₁₄ x,x₁₅ x
   ])
   
 def z₀ : bitvec word_len := (z x).nth 0
