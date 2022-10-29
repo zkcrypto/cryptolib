@@ -46,9 +46,9 @@ def xor' (v1 v2 : bitvec word_len): bitvec word_len :=
   v1.xor v2
 
 -- rotation
+
 -- Implements DJB's definition of '<<<' : https://github.com/alexwebr/salsa20/blob/master/salsa20.c#L6
 def rotl (input: bitvec 32) (shift : fin 32) : bitvec 32 :=
   (input.shl shift).or (input.ushr (32 - shift))
-
 
 end words
