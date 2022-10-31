@@ -41,11 +41,18 @@ def xor_2_lists :
 -- encrypt a message only if it is less than 64 bytes where
 -- keystream is always 64 bytes
 def salsa20_encrypt : list (bitvec byte_len) :=
-  if m.length > 63 then [] 
+  if m.length > 64 then [] 
   else  
     xor_2_lists m (get_keystream k₁ k₂ nonce).to_list
 
--- TODO: theorem `dec_undoes_enc`
+-- Main theorem for version 1 expansion
+theorem dec_undoes_enc : salsa20_encrypt k₁ k₂ (salsa20_encrypt k₁ k₂ m nonce) nonce = m :=
+begin
+  unfold salsa20_encrypt,
+  unfold get_keystream,
+  simp,
+  sorry,
+end
 
 -- TODO: use expansion version 2
 

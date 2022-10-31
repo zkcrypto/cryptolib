@@ -46,8 +46,15 @@ def v : bitvec word_len := 0x9fd1161d
 def x1 : bitvec 32 := 0xc0a8787e
 def x2 : bitvec 32 := 0x9fd1161d
 
-#eval (xor' x1 x2).to_nat
+#eval (bitvec.xor x1 x2).to_nat
 #eval 0x5f796e63
+
+-- xor the same vector equals zero
+#eval x1.to_nat
+#eval (bitvec.xor x1 x1).to_nat
+
+-- xor a vector and vector zero is equal the vector
+#eval (bitvec.xor x1 (bitvec.zero 32)).to_nat
 
 -- example from the spec for rot : 0xc0a8787e <<< 5 = 0x150f0fd8
 def v' : bitvec 32 := 0xc0a8787e

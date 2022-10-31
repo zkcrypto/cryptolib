@@ -41,9 +41,44 @@ def mod_as_nat (sum : zmod mod) : ℕ := sum.val
 -- convert a nat to a bitvec
 def nat_as_bitvec (n : ℕ) : bitvec word_len := bitvec.of_nat word_len n
 
--- xor = just bitwise xor
-def xor' (v1 v2 : bitvec word_len): bitvec word_len :=
-  v1.xor v2
+-- xor
+
+-- axioms
+
+-- a ⊕ a = 0
+axiom xor_twice_eq_zero (a : bitvec word_len) : a.xor a = bitvec.zero word_len
+-- a ⊕ 0 = a
+axiom xor_zero (a : bitvec word_len) : a.xor (bitvec.zero word_len) = a
+-- (a ⊕ b) ⊕ b = a
+axiom xor_assoc_v1 (a b : bitvec word_len) : (a.xor b).xor b = a
+-- (a ⊕ b) ⊕ a = b
+axiom xor_assoc_v2 (a b : bitvec word_len) : (a.xor b).xor a = b
+
+-- theorem
+
+-- c = a ⊕ b ↔ (a = c ⊕ b) ∧ (b = c ⊕ a)
+theorem xor_is_its_own_inverse (a b c : bitvec word_len) : c = a.xor b ↔ (a = c.xor b) ∧ (b = c.xor a) :=
+begin
+  split,
+  {
+    intro h,
+    split,
+    {
+      rw h,
+      rw xor_assoc_v1,
+    },
+    {
+      rw h,
+      rw xor_assoc_v2,
+    },
+  },
+  {
+    norm_num,
+    intros h1 h2,
+    rw h1,
+    rw xor_assoc_v1
+  }
+end
 
 -- rotation
 
