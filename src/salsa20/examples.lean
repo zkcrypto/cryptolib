@@ -39,8 +39,21 @@ namespace words
 def u : bitvec word_len := 0xc0a8787e
 def v : bitvec word_len := 0x9fd1161d
 
-#eval (nat_as_bitvec (mod_as_nat (sum_as_mod u v))).to_nat
+#eval (nat_as_bitvec (mod_as_nat (add_bitvecs_as_mod u v))).to_nat
 #eval 0x60798e9b
+
+-- addition zmod 2^32 has an inverse which is 
+-- substraction zmod 2^32. 
+def a : bitvec word_len := 3
+def sum_or_rest_by : bitvec word_len := 5
+
+-- do a sum
+#eval (nat_as_bitvec (mod_as_nat (add_bitvecs_as_mod a sum_or_rest_by))).to_nat
+
+-- get back to a
+#eval (nat_as_bitvec (mod_as_nat (add_bitvecs_as_mod 
+((nat_as_bitvec (mod_as_nat (substract_bitvecs_as_mod a sum_or_rest_by))))
+ sum_or_rest_by))).to_nat
 
 -- example from the spec for xor: 0xc0a8787e XOR 0x9fd1161d = 0x5f796e63
 def x1 : bitvec 32 := 0xc0a8787e
@@ -56,12 +69,34 @@ def x2 : bitvec 32 := 0x9fd1161d
 -- xor a vector and vector zero is equal the vector
 #eval (bitvec.xor x1 (bitvec.zero 32)).to_nat
 
+-- xor is its own inverse
+
+-- given 2 values:
+def orig : bitvec 32 := 4
+def xor_by : bitvec 32 := 8
+
+-- xor orig with another value 
+#eval (bitvec.xor orig xor_by).to_nat
+-- xor the result of the result again by the same value,
+-- orig is obtained from the operation
+#eval ((bitvec.xor orig xor_by).xor xor_by).to_nat
+
+
 -- example from the spec for rot : 0xc0a8787e <<< 5 = 0x150f0fd8
 def v' : bitvec 32 := 0xc0a8787e
 def shift : ℕ := 5
 
 #eval (rotl v' shift).to_nat
 #eval 0x150f0fd8
+
+-- rotl inverse
+def orig' : bitvec 32 := 17
+
+-- rotl nat
+#eval (rotl orig' shift).to_nat
+
+-- rotl inv of rotl orig returns orig
+#eval (rotl_inv (rotl orig' shift) shift).to_nat
 
 
 end words
