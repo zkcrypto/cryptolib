@@ -44,7 +44,23 @@ def mod_as_nat (sum : zmod mod) : ℕ := sum.val
 def nat_as_bitvec (n : ℕ) : bitvec word_len := bitvec.of_nat word_len n
 
 -- the inverse of the zmod sum of 2 bitvectors is the substraction of them
-def zmod_addition_inverse (a : zmod mod) : ℕ := mod - a.val  
+def zmod_addition_inverse (a : zmod mod) : ℕ := mod - a.val
+
+-- theorems
+
+-- zmod addition is not zmod addition inverse
+lemma double_zmod_addition_not_inverse (a b : zmod mod): a + b + b ≠ a :=
+begin
+  sorry,
+end
+
+-- inverse is substration 
+theorem zmod_addition_inv_is_inverse ( a b : zmod mod) : a + b - b = a := 
+begin
+  sorry,
+end
+
+
 
 -- xor
 
@@ -103,8 +119,14 @@ def rotl_inv (input: bitvec 32) (shift : fin 32) : bitvec 32 :=
 
 -- theorems
 
+-- rotl is not rotl inverse
+lemma double_rotl_not_inverse (input: bitvec 32) (shift : fin 32) : rotl (rotl input shift) shift ≠ input :=
+begin
+  sorry,
+end
+
 -- the inverse always undoes rotl 
-theorem rotl_inv_undoes_rotl (input: bitvec 32) (shift : fin 32) : 
+theorem rotl_inv_is_inverse (input: bitvec 32) (shift : fin 32) : 
   input = rotl_inv (rotl input shift) shift := 
 begin
   unfold rotl,
