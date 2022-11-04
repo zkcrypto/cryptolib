@@ -95,7 +95,10 @@ def orig' : bitvec 32 := 17
 -- rotl nat
 #eval (rotl orig' shift).to_nat
 
--- rotl inv of rotl orig returns orig
+-- rotl of rotl orig does not returns orig
+#eval (rotl (rotl orig' shift) shift).to_nat
+
+-- rotl inv of rotl orig return orig
 #eval (rotl_inv (rotl orig' shift) shift).to_nat
 
 
@@ -268,6 +271,51 @@ def y : (vector (bitvec word_len) 4) :=
 
 end example7
 
+-- examples for inverse
+namespace inverse1 
+
+def y : (vector (bitvec word_len) 4) := 
+  subtype.mk [0xe7e8c006, 0xc4f9417d, 0x6479b4b2, 0x68c67137] (by refl)
+
+#eval (y.nth 0).to_nat
+#eval (y₀ (quarterround y)).to_nat
+
+#eval (y.nth 3).to_nat
+#eval (y₃ (quarterround y)).to_nat
+
+#eval (y.nth 2).to_nat
+#eval (y₂ (quarterround y)).to_nat
+
+#eval (y.nth 1).to_nat
+#eval (y₁ (quarterround y)).to_nat
+
+
+end inverse1
+
+namespace inverse2
+
+def y : (vector (bitvec word_len) 4) := 
+  subtype.mk [0xe7e8c006, 0xc4f9417d, 0x6479b4b2, 0x68c67137] (by refl)
+
+-- double quaterround is not the inverse
+#eval (y.nth 0).to_nat
+#eval ((quarterround (quarterround y)).nth 0).to_nat
+
+def z (y : vector (bitvec word_len) 4) : vector (bitvec word_len) 4 := quarterround y
+
+#eval ((quarterround_inv (z y)).nth 0).to_nat
+
+#eval (y.nth 1).to_nat
+#eval ((quarterround_inv (z y)).nth 1).to_nat
+
+#eval (y.nth 2).to_nat
+#eval ((quarterround_inv (z y)).nth 2).to_nat
+
+#eval (y.nth 3).to_nat
+#eval ((quarterround_inv (z y)).nth 3).to_nat
+
+
+end inverse2
 
 end quarterround
 
