@@ -115,11 +115,6 @@ namespace example1
 def y : (vector (bitvec word_len) 4) := 
   subtype.mk [0x00000000, 0x00000000, 0x00000000, 0x00000000] (by refl)
 
-example : (z₁ y).to_nat = 0x00000000 := by refl
-example : (z₂ y).to_nat = 0x00000000 := by refl
-example : (z₃ y).to_nat = 0x00000000 := by refl
-example : (z₀ y).to_nat = 0x00000000 := by refl
-
 end example1
 
 -- example 2
@@ -128,19 +123,15 @@ namespace example2
 def y : (vector (bitvec word_len) 4) := 
   subtype.mk [0x00000001, 0x00000000, 0x00000000, 0x00000000] (by refl)
 
-#eval (z₁ y).to_nat
 #eval 0x00000080
 #eval ((quarterround y).nth 1).to_nat
 
-#eval (z₂ y).to_nat
 #eval 0x00010200
 #eval ((quarterround y).nth 2).to_nat
 
-#eval (z₃ y).to_nat
 #eval 0x20500000
 #eval ((quarterround y).nth 3).to_nat
 
-#eval (z₀ y).to_nat
 #eval 0x08008145
 #eval ((quarterround y).nth 0).to_nat
 
@@ -152,19 +143,15 @@ namespace example3
 def y : (vector (bitvec word_len) 4) := 
   subtype.mk [0x00000000, 0x00000001, 0x00000000, 0x00000000] (by refl)
 
-#eval (z₁ y).to_nat
 #eval 0x00000001
 #eval ((quarterround y).nth 1).to_nat
 
-#eval (z₂ y).to_nat
 #eval 0x00000200
 #eval ((quarterround y).nth 2).to_nat
 
-#eval (z₃ y).to_nat
 #eval 0x00402000
 #eval ((quarterround y).nth 3).to_nat
 
-#eval (z₀ y).to_nat
 #eval 0x88000100
 #eval ((quarterround y).head).to_nat
 
@@ -181,19 +168,15 @@ def y3 : bitvec word_len := 0x00000000
 def y : (vector (bitvec word_len) 4) := 
   subtype.mk [0x00000000, 0x00000000, 0x00000001, 0x00000000] (by refl)
 
-#eval (z₁ y).to_nat
 #eval 0x00000000
 #eval ((quarterround y).nth 1).to_nat
 
-#eval (z₂ y).to_nat
 #eval 0x00000001
 #eval ((quarterround y).nth 2).to_nat
 
-#eval (z₃ y).to_nat
 #eval 0x00002000
 #eval ((quarterround y).nth 3).to_nat
 
-#eval (z₀ y).to_nat
 #eval 0x80040000
 #eval ((quarterround y).head).to_nat
 
@@ -205,19 +188,15 @@ namespace example5
 def y : (vector (bitvec word_len) 4) := 
   subtype.mk [0x00000000, 0x00000000, 0x00000000, 0x00000001] (by refl)
 
-#eval (z₁ y).to_nat
 #eval 0x00000080
 #eval ((quarterround y).nth 1).to_nat
 
-#eval (z₂ y).to_nat
 #eval 0x00010000
 #eval ((quarterround y).nth 2).to_nat
 
-#eval (z₃ y).to_nat
 #eval 0x20100001
 #eval ((quarterround y).nth 3).to_nat
 
-#eval (z₀ y).to_nat
 #eval 0x00048044
 #eval ((quarterround y).head).to_nat
 
@@ -229,19 +208,15 @@ namespace example6
 def y : (vector (bitvec word_len) 4) := 
   subtype.mk [0xe7e8c006, 0xc4f9417d, 0x6479b4b2, 0x68c67137] (by refl)
 
-#eval (z₁ y).to_nat
 #eval 0x9361dfd5
 #eval ((quarterround y).nth 1).to_nat
 
-#eval (z₂ y).to_nat
 #eval 0xf1460244
 #eval ((quarterround y).nth 2).to_nat
 
-#eval (z₃ y).to_nat
 #eval 0x948541a3
 #eval ((quarterround y).nth 3).to_nat
 
-#eval (z₀ y).to_nat
 #eval 0xe876d72b
 #eval ((quarterround y).head).to_nat
 
@@ -253,19 +228,15 @@ namespace example7
 def y : (vector (bitvec word_len) 4) := 
   subtype.mk [0xd3917c5b, 0x55f1c407, 0x52a58a7a, 0x8f887a3b] (by refl)
 
-#eval (z₁ y).to_nat
 #eval 0xd90a8f36
 #eval ((quarterround y).nth 1).to_nat
 
-#eval (z₂ y).to_nat
 #eval 0x6ab2a923
 #eval ((quarterround y).nth 2).to_nat
 
-#eval (z₃ y).to_nat
 #eval 0x2883524c
 #eval ((quarterround y).nth 3).to_nat
 
-#eval (z₀ y).to_nat
 #eval 0x3e2f308c
 #eval ((quarterround y).head).to_nat
 
@@ -278,17 +249,16 @@ def y : (vector (bitvec word_len) 4) :=
   subtype.mk [0xe7e8c006, 0xc4f9417d, 0x6479b4b2, 0x68c67137] (by refl)
 
 #eval (y.nth 0).to_nat
-#eval (y₀ (quarterround y)).to_nat
+#eval ((quarterround_inv (quarterround y)).nth 0).to_nat
 
 #eval (y.nth 3).to_nat
-#eval (y₃ (quarterround y)).to_nat
+#eval ((quarterround_inv (quarterround y)).nth 3).to_nat
 
 #eval (y.nth 2).to_nat
-#eval (y₂ (quarterround y)).to_nat
+#eval ((quarterround_inv (quarterround y)).nth 2).to_nat
 
 #eval (y.nth 1).to_nat
-#eval (y₁ (quarterround y)).to_nat
-
+#eval ((quarterround_inv (quarterround y)).nth 1).to_nat
 
 end inverse1
 
@@ -304,15 +274,19 @@ def y : (vector (bitvec word_len) 4) :=
 def z (y : vector (bitvec word_len) 4) : vector (bitvec word_len) 4 := quarterround y
 
 #eval ((quarterround_inv (z y)).nth 0).to_nat
+#eval ((quarterround_inv (quarterround y)).nth 0).to_nat
 
 #eval (y.nth 1).to_nat
 #eval ((quarterround_inv (z y)).nth 1).to_nat
+#eval ((quarterround_inv (quarterround y)).nth 1).to_nat
 
 #eval (y.nth 2).to_nat
 #eval ((quarterround_inv (z y)).nth 2).to_nat
+#eval ((quarterround_inv (quarterround y)).nth 2).to_nat
 
 #eval (y.nth 3).to_nat
 #eval ((quarterround_inv (z y)).nth 3).to_nat
+#eval ((quarterround_inv (quarterround y)).nth 3).to_nat
 
 
 end inverse2
@@ -346,68 +320,68 @@ def y : vector (bitvec word_len) 16 :=
   subtype.mk [y₀, y₁, y₂, y₃, y₄, y₅, y₆, y₇, y₈, y₉, y₁₀, y₁₁, y₁₂, y₁₃, y₁₄, y₁₅] (by refl)
 
 -- z₀
-#eval ((rowround y).nth 0).to_nat
 #eval 0x08008145
+#eval ((rowround y) 0 0).to_nat
 
 -- z₁
-#eval ((rowround y).nth 1).to_nat
 #eval 0x00000080
+#eval ((rowround y) 0 1).to_nat
 
 -- z₂
-#eval ((rowround y).nth 2).to_nat
 #eval 0x00010200
+#eval ((rowround y) 0 2).to_nat
 
 -- z₃
-#eval ((rowround y).nth 3).to_nat
 #eval 0x20500000
+#eval ((rowround y) 0 3).to_nat
 
 -- z₄
-#eval ((rowround y).nth 4).to_nat
 #eval 0x20100001
+#eval ((rowround y) 1 0).to_nat
 
 -- z₅
-#eval ((rowround y).nth 5).to_nat
 #eval 0x00048044
+#eval ((rowround y) 1 1).to_nat
 
 -- z₆
-#eval ((rowround y).nth 6).to_nat
 #eval 0x00000080
+#eval ((rowround y) 1 2).to_nat
 
 -- z₇
-#eval ((rowround y).nth 7).to_nat
 #eval 0x00010000
+#eval ((rowround y) 1 3).to_nat
 
 -- z₈
-#eval ((rowround y).nth 8).to_nat
 #eval 0x00000001
+#eval ((rowround y) 2 0).to_nat
 
 -- z₉
-#eval ((rowround y).nth 9).to_nat
 #eval 0x00002000
+#eval ((rowround y) 2 1).to_nat
 
 -- z₁₀
-#eval ((rowround y).nth 10).to_nat
 #eval 0x80040000
+#eval ((rowround y) 2 2).to_nat
 
 -- z₁₁
-#eval ((rowround y).nth 11).to_nat
 #eval 0x00000000
+#eval ((rowround y) 2 3).to_nat
 
 -- z₁₂
-#eval ((rowround y).nth 12).to_nat
 #eval 0x00000001
+#eval ((rowround y) 3 0).to_nat
 
 -- z₁₃
-#eval ((rowround y).nth 13).to_nat
 #eval 0x00000200
+#eval ((rowround y) 3 1).to_nat
 
 -- z₁₄
-#eval ((rowround y).nth 14).to_nat
 #eval 0x00402000
+#eval ((rowround y) 3 2).to_nat
 
 -- z₁₅
-#eval ((rowround y).nth 15).to_nat
 #eval 0x88000100
+#eval ((rowround y) 3 3).to_nat
 
 end example1
 
@@ -435,68 +409,68 @@ def y : vector (bitvec word_len) 16 :=
   subtype.mk [y₀, y₁, y₂, y₃, y₄, y₅, y₆, y₇, y₈, y₉, y₁₀, y₁₁, y₁₂, y₁₃, y₁₄, y₁₅] (by refl)
 
 -- z₀
-#eval ((rowround y).nth 0).to_nat
 #eval 0xa890d39d
+#eval ((rowround y) 0 0).to_nat
 
 -- z₁
-#eval ((rowround y).nth 1).to_nat
 #eval 0x65d71596
+#eval ((rowround y) 0 1).to_nat
 
 -- z₂
-#eval ((rowround y).nth 2).to_nat
 #eval 0xe9487daa
+#eval ((rowround y) 0 2).to_nat
 
 -- z₃
-#eval ((rowround y).nth 3).to_nat
 #eval 0xc8ca6a86
+#eval ((rowround y) 0 3).to_nat
 
 -- z₄
-#eval ((rowround y).nth 4).to_nat
 #eval 0x949d2192
+#eval ((rowround y) 1 0).to_nat
 
 -- z₅
-#eval ((rowround y).nth 5).to_nat
 #eval 0x764b7754
+#eval ((rowround y) 1 1).to_nat
 
 -- z₆
-#eval ((rowround y).nth 6).to_nat
 #eval 0xe408d9b9
+#eval ((rowround y) 1 2).to_nat
 
 -- z₇
-#eval ((rowround y).nth 7).to_nat
 #eval 0x7a41b4d1
+#eval ((rowround y) 1 3).to_nat
 
 -- z₈
-#eval ((rowround y).nth 8).to_nat
 #eval 0x3402e183
+#eval ((rowround y) 2 0).to_nat
 
 -- z₉
-#eval ((rowround y).nth 9).to_nat
 #eval 0x3c3af432
+#eval ((rowround y) 2 1).to_nat
 
 -- z₁₀
-#eval ((rowround y).nth 10).to_nat
 #eval 0x50669f96
+#eval ((rowround y) 2 2).to_nat
 
 -- z₁₁
-#eval ((rowround y).nth 11).to_nat
 #eval 0xd89ef0a8
+#eval ((rowround y) 2 3).to_nat
 
 -- z₁₂
-#eval ((rowround y).nth 12).to_nat
 #eval 0x0040ede5
+#eval ((rowround y) 3 0).to_nat
 
 -- z₁₃
-#eval ((rowround y).nth 13).to_nat
 #eval 0xb545fbce
+#eval ((rowround y) 3 1).to_nat
 
 -- z₁₄
-#eval ((rowround y).nth 14).to_nat
 #eval 0xd257ed4f
+#eval ((rowround y) 3 2).to_nat
 
 -- z₁₅
-#eval ((rowround y).nth 15).to_nat
 #eval 0x1818882d
+#eval ((rowround y) 3 3).to_nat
 
 end example2
 
@@ -504,7 +478,7 @@ end example2
 end rowround 
 
 
-namespace rowround
+namespace columnround
 
 -- example 1
 namespace example1
@@ -530,68 +504,68 @@ def x : vector (bitvec word_len) 16 :=
   subtype.mk [x₀, x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, x₁₃, x₁₄, x₁₅] (by refl)
 
 -- y₀
-#eval ((columnround x).nth 0).to_nat
 #eval 0x10090288
+#eval ((columnround x) 0 0).to_nat
 
 -- y₁
-#eval ((columnround x).nth 1).to_nat
 #eval 0x00000000
+#eval ((columnround x) 0 1).to_nat
 
 -- y₂
-#eval ((columnround x).nth 2).to_nat
 #eval 0x00000000
+#eval ((columnround x) 0 2).to_nat
 
 -- y₃
-#eval ((columnround x).nth 3).to_nat
 #eval 0x00000000
+#eval ((columnround x) 0 3).to_nat
 
 -- y₄
-#eval ((columnround x).nth 4).to_nat
 #eval 0x00000101
+#eval ((columnround x) 1 0).to_nat
 
 -- y₅
-#eval ((columnround x).nth 5).to_nat
 #eval 0x00000000
+#eval ((columnround x) 1 1).to_nat
 
 -- y₆
-#eval ((columnround x).nth 6).to_nat
 #eval 0x00000000
+#eval ((columnround x) 1 2).to_nat
 
 -- y₇
-#eval ((columnround x).nth 7).to_nat
 #eval 0x00000000
+#eval ((columnround x) 1 3).to_nat
 
 -- y₈
-#eval ((columnround x).nth 8).to_nat
 #eval 0x00020401
+#eval ((columnround x) 2 0).to_nat
 
 -- y₉
-#eval ((columnround x).nth 9).to_nat
 #eval 0x00000000
+#eval ((columnround x) 2 1).to_nat
 
 -- y₁₀
-#eval ((columnround x).nth 10).to_nat
 #eval 0x00000000
+#eval ((columnround x) 2 2).to_nat
 
 -- y₁₁
-#eval ((columnround x).nth 11).to_nat
 #eval 0x00000000
+#eval ((columnround x) 2 3).to_nat
 
 -- y₁₂
-#eval ((columnround x).nth 12).to_nat
 #eval 0x40a04001
+#eval ((columnround x) 3 0).to_nat
 
 -- y₁₃
-#eval ((columnround x).nth 13).to_nat
 #eval 0x00000000
+#eval ((columnround x) 3 1).to_nat
 
 -- y₁₄
-#eval ((columnround x).nth 14).to_nat
 #eval 0x00000000
+#eval ((columnround x) 3 2).to_nat
 
 -- y₁₅
-#eval ((columnround x).nth 15).to_nat
 #eval 0x00000000
+#eval ((columnround x) 3 3).to_nat
 
 end example1
 
@@ -619,73 +593,73 @@ def x : vector (bitvec word_len) 16 :=
   subtype.mk [x₀, x₁, x₂, x₃, x₄, x₅, x₆, x₇, x₈, x₉, x₁₀, x₁₁, x₁₂, x₁₃, x₁₄, x₁₅] (by refl)
 
 -- y₀
-#eval ((columnround x).nth 0).to_nat
 #eval 0x8c9d190a
+#eval ((columnround x) 0 0).to_nat
 
 -- y₁
-#eval ((columnround x).nth 1).to_nat
 #eval 0xce8e4c90
+#eval ((columnround x) 0 1).to_nat
 
 -- y₂
-#eval ((columnround x).nth 2).to_nat
 #eval 0x1ef8e9d3
+#eval ((columnround x) 0 2).to_nat
 
 -- y₃
-#eval ((columnround x).nth 3).to_nat
 #eval 0x1326a71a
+#eval ((columnround x) 0 3).to_nat
 
 -- y₄
-#eval ((columnround x).nth 4).to_nat
 #eval 0x90a20123
+#eval ((columnround x) 1 0).to_nat
 
 -- y₅
-#eval ((columnround x).nth 5).to_nat
 #eval 0xead3c4f3
+#eval ((columnround x) 1 1).to_nat
 
 -- y₆
-#eval ((columnround x).nth 6).to_nat
 #eval 0x63a091a0
+#eval ((columnround x) 1 2).to_nat
 
 -- y₇
-#eval ((columnround x).nth 7).to_nat
 #eval 0xf0708d69
+#eval ((columnround x) 1 3).to_nat
 
 -- y₈
-#eval ((columnround x).nth 8).to_nat
 #eval 0x789b010c
+#eval ((columnround x) 2 0).to_nat
 
 -- y₉
-#eval ((columnround x).nth 9).to_nat
 #eval 0xd195a681
+#eval ((columnround x) 2 1).to_nat
 
 -- y₁₀
-#eval ((columnround x).nth 10).to_nat
 #eval 0xeb7d5504
+#eval ((columnround x) 2 2).to_nat
 
 -- y₁₁
-#eval ((columnround x).nth 11).to_nat
 #eval 0xa774135c
+#eval ((columnround x) 2 3).to_nat
 
 -- y₁₂
-#eval ((columnround x).nth 12).to_nat
 #eval 0x481c2027
+#eval ((columnround x) 3 0).to_nat
 
 -- y₁₃
-#eval ((columnround x).nth 13).to_nat
 #eval 0x53a8e4b5
+#eval ((columnround x) 3 1).to_nat
 
 -- y₁₄
-#eval ((columnround x).nth 14).to_nat
 #eval 0x4c1f89c5
+#eval ((columnround x) 3 2).to_nat
 
 -- y₁₅
-#eval ((columnround x).nth 15).to_nat
 #eval 0x3f78c9c8
+#eval ((columnround x) 3 3).to_nat
 
 end example2
 
 
-end rowround
+end columnround
 
 
 namespace doubleround
