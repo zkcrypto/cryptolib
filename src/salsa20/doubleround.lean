@@ -16,10 +16,11 @@ namespace doubleround
 -- rowround(columnround(x))
 def doubleround(x : vector (bitvec word_len) 16) : vector (bitvec word_len) 16 := do
   let y := columnround x,
-  rowround y
+  matrix_as_vector (rowround (matrix_as_vector y))
 
 lemma doubleround_zero : 
   doubleround (subtype.mk [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] (by refl)) = 
     subtype.mk [0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0] (by refl) := rfl
+
 
 end doubleround
