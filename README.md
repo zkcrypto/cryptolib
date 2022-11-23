@@ -46,4 +46,4 @@ $ leanproject build
 
 - [modes.lean](src/modes.lean) - Formalize some modes of operations for block ciphers.
 
-- [salsa20/](src/salsa20/) - Attempt to formalize salsa20 from the spec.
+- [salsa20/](src/salsa20/) - Attempt to formalize salsa20 from the spec. WORK HAS MOVED TO https://github.com/oxarbitrage/salsa20/
