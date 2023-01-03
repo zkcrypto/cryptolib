@@ -37,6 +37,11 @@ begin
     have kr_leq_k₀r : (k:ℝ) ≤ k₀ := nat.cast_le.mpr k_leq_k₀,
     have k₀_pos : 0 < k₀ := by {apply le_max_right k 1},
     have a := h k₀ k₀_pos,
+
+    -- use k₀,
+    -- intros n c_pos hn, 
+    -- have hnnn : k ≤ n := by linarith
+
     cases a with n' hn₀,
     let n₀ := max n' 1,
     have n₀_pos : 0 < n₀ := by apply le_max_right n' 1,

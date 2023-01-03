@@ -27,18 +27,26 @@ variables {G1 G2 M C A_state: Type} [decidable_eq M]
   Executes the a public-key protocol defined by keygen,
   encrypt, and decrypt
 -/
-def enc_dec  (m : M) : pmf (zmod 2) := 
+-- Simulates running the program and returns 1 with prob 1 if:
+-- `Pr[D(sk, E(pk, m)) = m] = 1` holds
+def enc_dec  (m : M) : pmf (zmod 2) :=  -- given a message m
 do 
-  k ← keygen,
-  c ← encrypt k.1 m,
-  pure (if decrypt k.2 c = m then 1 else 0)
+  k ← keygen, -- produces a public / secret key pair
+  c ← encrypt k.1 m, -- encrypts m using pk
+  pure (if decrypt k.2 c = m then 1 else 0) -- decrypts using sk and checks for equality with m
+
+#check enc_dec
 
 /- 
   A public-key encryption protocol is correct if decryption undoes 
   encryption with probability 1
 -/
-def pke_correctness : Prop := ∀ (m : M), enc_dec keygen encrypt decrypt m = pure 1 
 
+-- I'm not really sure what this is... Is this a proof?
+def pke_correctness : Prop := ∀ (m : M), enc_dec keygen encrypt decrypt m = pure 1 -- This chain of encryption/decryption matches the monadic actions in the `enc_dec` function
+
+#check pke_correctness
+#check pke_correctness keygen
 /- 
   The semantic security game. 
   Returns 1 if the attacker A2 guesses the correct bit
@@ -57,3 +65,4 @@ local notation `Pr[SSG(A)]` := (SSG keygen encrypt A1 A2 1 : ℝ)
 
 def pke_semantic_security (ε : nnreal) : Prop := abs (Pr[SSG(A)] - 1/2) ≤ ε 
 
+#check Pr[SSG(A)]

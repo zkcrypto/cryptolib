@@ -14,14 +14,14 @@ def uniform_bitvec (n : ℕ) : pmf (bitvec n) :=
   pmf.of_multiset (bitvec.fintype n).elems.val (bitvec.multiset_ne_zero n)
 
 def uniform_grp : pmf G := 
-  pmf.of_multiset (fintype.elems G).val (group.multiset_ne_zero G)
+  pmf.of_multiset (fintype.elems G).val (group.multiset_ne_zero G) -- Give of_multiset a multiset (finite elements of G) and prove that it is non-empty
 
-def uniform_zmod (n : ℕ) [fact (0 < n)] : pmf (zmod n) := uniform_grp (zmod n)
+def uniform_zmod (n : ℕ) [fact (0 < n)] : pmf (zmod n) := uniform_grp (zmod n) -- How legit is this? The caveats around `fact` must be examined in more detail
 
 def uniform_2 : pmf (zmod 2) := uniform_zmod 2 
 
 lemma uniform_grp_prob : 
-  ∀ (g : G), (uniform_grp G) g = 1 / multiset.card (fintype.elems G).val :=
+  ∀ (g : G), (uniform_grp G) g = 1 / multiset.card (fintype.elems G).val := 
 begin
   intro g,
   have h1 : ⇑(uniform_grp G) = (λ (a : G), 
@@ -42,6 +42,7 @@ begin
   rw h3,
   simp,
 end 
+#check uniform_grp_prob
 
 lemma uniform_zmod_prob {n : ℕ} [fact (0 < n)] : 
   ∀ (a : zmod n), (uniform_zmod n) a = 1/n := 

@@ -17,65 +17,83 @@ noncomputable theory
 
 parameters (G : Type) [fintype G] [comm_group G] [decidable_eq G] 
            (g : G) (g_gen_G : ∀ (x : G), x ∈ subgroup.gpowers g)
+           (h : G) (h_gen_G : ∀ (x : G), x ∈ subgroup.gpowers h)
            (q : ℕ) [fact (0 < q)] (G_card_q : fintype.card G = q) 
            (A_state : Type)
 
-include g_gen_G G_card_q
+include g_gen_G h_gen_G G_card_q
 
 parameters (A1 : G → pmf (G × G × A_state))
            (A2 : G → G → A_state → pmf (zmod 2))
            
 def A2' : G × G → A_state → pmf (zmod 2) := λ (gg : G × G), A2 gg.1 gg.2
 
--- generates a public key `g^x.val`, and private key `x`
-def keygen : pmf (G × (zmod q)) := 
+-- generates a random opening value
+def opening_value : pmf (zmod q) := 
 do 
-  x ← uniform_zmod q,
-  pure (g^x.val, x) 
+  x ← uniform_zmod q, -- choose from ℤq
+  pure (x)
 
-#check keygen
--- encrypt takes a pair (public key, message)
-def encrypt (pk m : G) : pmf (G × G) := 
+-- commit takes a message M ∈ G and the opening_value ∈ ℤq and returns a commitment, a pair of values 
+def commit (M : G) : pmf (G × G) := 
 do
-  y ← uniform_zmod q,
-  pure (g^y.val, pk^y.val * m)
+  r ← opening_value,
+  -- c₀ ← g^r.val -- doesn't work??
+  pure (g^r.val, M*h^r.val)
 
--- `x` is the secret key, `c.1` is g^y, the first part of the 
--- cipher text returned from encrypt, and `c.2` is the 
--- second value returned from encrypt
-def decrypt (x : zmod q)(c : G × G) : G := 
-	(c.2 / (c.1^x.val)) 
+-- Or: Better to create a global parameter?
+-- Somehow a commitment must also keep track of M and r...
+parameter (r' : zmod q) 
 
+-- variable (r'' : opening_value)
+
+-- Moni Naor - general commitment schemes
+
+#check r'
+def commit' (M : G) : pmf (G × G) := return (g^r'.val, M*h^r'.val)
+
+-- Use r as the key in encryption
+-- For defining commitment it doesn't matter how r is generated
+-- Does matter for computational binding because under the discrete log assumption the adv. gets a g^r' (r' random)
+-- In contrast to elgamal encryption commitments are deterministic
+-- What if r == 0? Do we have to treat this as a separate case?
+def commit'' (M : G) (r : zmod q) : G × G := return (g^r.val, M*h^r.val)
+
+-- `c` is the given commitment, `v` is the pair made up of the message M ∈ G and the opening value, r, provided by the committer at the verification step. Projections are used to access both values of the `v` pair.
+-- I think verify needs to reconstruct the commitment from the message and the opening value - but then what does it check *against*?
+-- Verify can demonstrate how it *should* work, but it can't actually prove anything on its own... 
+-- How do we prove correctness?
+-- Makes more sense to think of this as a {0, 1} function - object level rather than meta level
+-- Check out EasyCrypt paper - how do they model this?
+def verify (c : G × G) (v : G × zmod q) : Prop := -- but this must be `pmf (zmod q)`?
+	c = (g^v.2.val, v.1*h^v.2.val)
+
+-- Do we need to do this? `verify` is more definitional then lemma...
+lemma verify' (c : G × G) (v : G × zmod q) : c = (g^v.2.val, v.1*h^v.2.val) := sorry
 
 
 /- 
   -----------------------------------------------------------
-  Proof of correctness of ElGamal
+  Proof of binding property of ElGamal Commitments
   -----------------------------------------------------------
 -/
+-- Binding is “perfect” and follows almost directly. Suppose (g^r’,M’h^r’)=(g^r,Mh^r). Since g is a generator, this means r=r’. But then h^r’=h^r, so from M’h^r’=Mh^r we can conclude M=M’. 
 
-lemma decrypt_eq_m (m : G) (x y: zmod q) : decrypt x ((g^y.val), ((g^x.val)^y.val * m)) = m := 
+-- Given g h ∈ G (provided now by `parameters` above) have the adversary choose some M' ∈ G and r' ∈ ℤq such that c = c'
+-- Prove by contradiction?
+-- ∀r,r', so no need to worry about uniform selection of r
+lemma perfect_binding' {M M' : G} (c : G × G) : M = M' :=
 begin
-  simp [decrypt],
-  rw (pow_mul g x.val y.val).symm,
-  rw (pow_mul g y.val x.val).symm,
-  rw mul_comm y.val x.val,
-  repeat {rw group.div_eq_mul_inv},
-  conv_lhs {rw [mul_assoc, mul_comm m _, <- mul_assoc]},
-  rw mul_inv_self _,
-  exact one_mul m,
+  by_contra h, --???
+  sorry
 end
 
-theorem elgamal_correctness : pke_correctness keygen encrypt decrypt :=
+lemma perfect_binding (v : G × zmod q) : Prop :=
 begin
-  simp [pke_correctness],
-  intro m,
-  simp [enc_dec, keygen, encrypt, bind],
-  bind_skip_const with x,
-  simp [pure],
-  bind_skip_const with y,
-  simp_rw decrypt_eq_m,
-  simp,
+  have c₀ : g^v.2.val, 
+  have c₁ : v.1*h^v.2.val,
+
+  sorry
 end
 
 
