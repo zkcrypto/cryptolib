@@ -1,3 +1,6 @@
+/-
+From the [Lean Reference Manual section 3.3](https://leanprover.github.io/reference/expressions.html)
+-/
 universe u
 
 def ex1 (x y z : ℕ) : ℕ := x + y + z
@@ -18,7 +21,7 @@ def id2 {α : Type u} (x : α) : α := x
 #check @id2 ℕ 3
 #check (id2 : ℕ → ℕ)
 
-def id3 {{α : Type u}} (x : α) : α := x
+def id3 {{α : Type u}} (x : α) : α := x -- weakly inserted implicit argument
 
 #check id3 3
 #check @id3 ℕ 3
