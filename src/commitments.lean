@@ -31,24 +31,25 @@ Verification phase:
 
 variables {G M D C Commiter_state : Type} [decidable_eq M]
           (gen : G → ℤ → G → G) -- Given G, q, g return h
-          (commit : M → pmf (C × D))
+          (commit : M → D → C) -- send c.1 - don't send the opening value - it doesn't to be remenbered, only in the binding experiment do we need two values quantified overall messages
           (verify : C → M → D → bool)
-          (Commiter1 : pmf (C × Commiter_state)) -- phase 1 commiter
-          (Commiter2 : Commiter_state → (M × D)) -- phase 2 commiter
+
+          (Adversary1 : pmf (C × Commiter_state)) -- phase 1 M x X
+          (Adversary2 : Commiter_state → (M × D)) -- phase 2 commiter
 
 /-
 Simulates running the program and returns 1 with prob 1 if verify holds
 -/
-def commit_verify (m : M) : pmf (zmod 2) := 
+def commit_verify (m : M) (d : D) : pmf (zmod 2) := 
 do 
-  c ← commit m, 
-  pure (if verify c.1 m c.2 then 1 else 0) 
+  c ← commit m d, 
+  pure (if verify c m d then 1 else 0) 
 
 /- 
   A commitment protocol is correct if verification undoes 
   commitment with probability 1
 -/
-def commitment_correctness : Prop := ∀ (m : M), commit_verify commit verify m = pure 1 
+def commitment_correctness : Prop := ∀ (m : M) (d : D), commit_verify commit verify m = pure 1 
 
 /- 
   A commitment scheme must obey two properties
@@ -66,11 +67,18 @@ def commitment_correctness : Prop := ∀ (m : M), commit_verify commit verify m 
 def HG (g : G) (q : ℤ) : pmf (zmod 2):= 
 do 
   h ← gen g q g, 
-  m ← A1 k.1, -- A1 outputs M
+  m ← Commiter1 k.1, -- A1 outputs M
   b ← uniform_2, -- adversary only gets first component of pair
   c ← encrypt k.1 (if b = 0 then m.1 else m.2.1),
   b' ← A2 c m.2.2,
   pure (1 + b + b')
 
 def hiding_property (ε : nnreal) : Prop := abs (Pr[HG(A)] - 1/2) ≤ ε 
+
+-- game where adv. generates two messages
+-- commiter commits to one chosen at random
+-- opening value has to be an input to commit, but we don't really care what it is (could be a series of coin flips in the process or, could be a random string provided as input) 
+
+
 -- Also need perfect hiding
+-- Definition of perfect binding...? Has anyone written this down?
