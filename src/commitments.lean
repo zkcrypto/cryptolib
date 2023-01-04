@@ -16,65 +16,61 @@ noncomputable theory
   M = message space
   D = space of opening values (order q)
   C = commitment space (in practice includes committed message and opening value computed by S)
+  A1 = first
 -/
-variables {G M R C A_state : Type} [decidable_eq M]
-          (gen : pmf G)
-          (commit : G → M → pmf C)
-          (verify : G → C → M)
-          (A1 : G → pmf (M × M × A_state)) -- Rewrite
-          (A2 : C → A_state → pmf (zmod 2)) -- Rewrite
 
-/- 
-  Executes commitment protocol defined by opening_value, commit and verify
+/-
+Commitment phase:
+1. Run Gen to establish public security parameters (R to run?).
+2. C samples an opening value, computes commitment, and sends commitment to R.
+
+Verification phase:
+3. C sends message, opening value pair to R.
+4. R accepts or rejects commitment depending on result of verification.
 -/
--- Simulates running the program and returns 1 with prob 1 if:
--- `Verify(c, m, d)` holds
+
+variables {G M D C Commiter_state : Type} [decidable_eq M]
+          (gen : G → ℤ → G → G) -- Given G, q, g return h
+          (commit : M → pmf (C × D))
+          (verify : C → M → D → bool)
+          (Commiter1 : pmf (C × Commiter_state)) -- phase 1 commiter
+          (Commiter2 : Commiter_state → (M × D)) -- phase 2 commiter
+
+/-
+Simulates running the program and returns 1 with prob 1 if verify holds
+-/
 def commit_verify (m : M) : pmf (zmod 2) := 
 do 
-  h ← gen, -- Not needed? h isn't typical of all commitment schemes - gen should generate G, g, q, and h in the case of Pedersen and elgamal
-  d ← gen, -- But this should be chosen uniformly from ℤq
-  c ← commit h m, -- c would be some (G x ℤq) - opening value as part of commit
-  pure (if verify h c = m then 1 else 0) 
+  c ← commit m, 
+  pure (if verify c.1 m c.2 then 1 else 0) 
 
 /- 
   A commitment protocol is correct if verification undoes 
   commitment with probability 1
 -/
-
-def commitment_correctness : Prop := ∀ (m : M), commit_verify gen commit verify m = pure 1 
-
-#check commitment_correctness
-
+def commitment_correctness : Prop := ∀ (m : M), commit_verify commit verify m = pure 1 
 
 /- 
   A commitment scheme must obey two properties
+  
   Hiding: "commitment c does not leak information about m (either perfect secrecy, or computational indistinguishability)"
+  
   Binding: "no adversary (either powerful or computationally bounded) can generate c, m 6 = m′ and d, d′ such that both Verify(c, m, d) and Verify(c, m′, d′) accept"
 -/
 
-
-def hiding_prop : Prop := sorry -- Note can't use 'hiding' for some reason - namespace collision?
-def binding_prop : Prop := sorry
-
-
-
 /- 
   The hiding game. 
-  Returns 1 if the attacker A2 guesses the correct bit
 
-  In regards to security properties: Have to be defined in terms of the first step of the protocol which returns the commitment, but not (M x d)
+  Regarding security properties: Have to be defined in terms of the first step of the protocol which returns the commitment, but not (M x D)
 -/
-def HG : pmf (zmod 2):= 
+def HG (g : G) (q : ℤ) : pmf (zmod 2):= 
 do 
-  -- k ← keygen,  -- No need for this
+  h ← gen g q g, 
   m ← A1 k.1, -- A1 outputs M
   b ← uniform_2, -- adversary only gets first component of pair
   c ← encrypt k.1 (if b = 0 then m.1 else m.2.1),
   b' ← A2 c m.2.2,
   pure (1 + b + b')
-
--- SSG(A) denotes the event that A wins the semantic security game
-local notation `Pr[HG(A)]` := (HG keygen encrypt A1 A2 1 : ℝ) -- Rewrite
 
 def hiding_property (ε : nnreal) : Prop := abs (Pr[HG(A)] - 1/2) ≤ ε 
 -- Also need perfect hiding
