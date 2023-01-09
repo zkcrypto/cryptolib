@@ -29,13 +29,13 @@ Verification phase:
 4. R accepts or rejects commitment depending on result of verification.
 -/
 
-variables {G M D C Commiter_state : Type} [decidable_eq M]
-          (gen : G → ℤ → G → G) -- Given G, q, g return h
-          (commit : M → D → C) -- send c.1 - don't send the opening value - it doesn't to be remenbered, only in the binding experiment do we need two values quantified overall messages
-          (verify : C → M → D → bool)
+variables {M D C : Type} [decidable_eq M]
+          (gen : D) 
+          (commit : M → D → pmf C) -- C must be pmf to match monadic expectations in `commit_verify`
+          (verify : C → D → pmf M)
 
-          (Adversary1 : pmf (C × Commiter_state)) -- phase 1 M x X
-          (Adversary2 : Commiter_state → (M × D)) -- phase 2 commiter
+          (BindingAdversary : pmf (C × D × D)) 
+          (HidingAdversary : (M × M))
 
 /-
 Simulates running the program and returns 1 with prob 1 if verify holds
@@ -43,37 +43,36 @@ Simulates running the program and returns 1 with prob 1 if verify holds
 def commit_verify (m : M) (d : D) : pmf (zmod 2) := 
 do 
   c ← commit m d, 
-  pure (if verify c m d then 1 else 0) 
+  pure (if verify c d = m then 1 else 0) 
 
 /- 
   A commitment protocol is correct if verification undoes 
   commitment with probability 1
 -/
-def commitment_correctness : Prop := ∀ (m : M) (d : D), commit_verify commit verify m = pure 1 
+def commitment_correctness : Prop := ∀ (m : M) (d : D), commit_verify commit verify m d = pure 1 
 
-/- 
-  A commitment scheme must obey two properties
-  
-  Hiding: "commitment c does not leak information about m (either perfect secrecy, or computational indistinguishability)"
-  
+/-
   Binding: "no adversary (either powerful or computationally bounded) can generate c, m 6 = m′ and d, d′ such that both Verify(c, m, d) and Verify(c, m′, d′) accept"
 -/
+def BG : pmf (zmod 2) :=
+do 
+  bc ← BindingAdversary,
+  m₀ ← verify bc.1 bc.2.1,
+  m₁ ← verify bc.1 bc.2.2,
+  pure (if m₀ = m₁ then 0 else 1) -- reverse if-else result since we want the negation
+
+local notation `Pr[BG(A)]` := (BG verify BindingAdversary 1 : ℝ) -- #check BG seems reversed?
+
+def binding_property (ε : nnreal) : Prop := abs (Pr[BG(A)] - 1/2) ≤ ε
 
 /- 
-  The hiding game. 
-
-  Regarding security properties: Have to be defined in terms of the first step of the protocol which returns the commitment, but not (M x D)
+  Hiding: "commitment c does not leak information about m (either perfect secrecy, or computational indistinguishability)"
 -/
-def HG (g : G) (q : ℤ) : pmf (zmod 2):= 
-do 
-  h ← gen g q g, 
-  m ← Commiter1 k.1, -- A1 outputs M
-  b ← uniform_2, -- adversary only gets first component of pair
-  c ← encrypt k.1 (if b = 0 then m.1 else m.2.1),
-  b' ← A2 c m.2.2,
-  pure (1 + b + b')
 
-def hiding_property (ε : nnreal) : Prop := abs (Pr[HG(A)] - 1/2) ≤ ε 
+def HG : pmf (zmod 2):= 
+do 
+  hm ← HidingAdversary,
+
 
 -- game where adv. generates two messages
 -- commiter commits to one chosen at random
