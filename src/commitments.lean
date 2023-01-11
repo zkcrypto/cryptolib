@@ -31,8 +31,8 @@ Verification phase:
 -- (not an exact match to the above)
 variables {M D C : Type} [decidable_eq M]
           (gen : D) -- a generator for the opening value, *not* for public parameters pκ 
-          (commit : M → D → pmf C) -- C must be pmf to match monadic expectations in `commit_verify`
-          (verify : C → D → M) -- verify should be a boolean
+          (commit : M → D → pmf C) -- C must be pmf to match monadic expectations in `commit_verify` TODO: change return to pair
+          (verify : C → D → M) -- TODO: verify should be a boolean
 
           (BindingAdversary : pmf (C × D × D)) 
           (HidingAdversary : pmf (M × M))
