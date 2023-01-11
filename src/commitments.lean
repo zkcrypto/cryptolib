@@ -15,8 +15,7 @@ noncomputable theory
   G = The agreed upon group (order q and generator g)
   M = message space
   D = space of opening values (order q)
-  C = commitment space (in practice includes committed message and opening value computed by S)
-  A1 = first
+  C = commitment space (in theory includes committed message and opening value computed by committer)
 -/
 
 /-
@@ -29,16 +28,18 @@ Verification phase:
 4. R accepts or rejects commitment depending on result of verification.
 -/
 
+-- (not an exact match to the above)
 variables {M D C : Type} [decidable_eq M]
-          (gen : D) 
+          (gen : D) -- a generator for the opening valye, *not* for public parameters pκ 
           (commit : M → D → pmf C) -- C must be pmf to match monadic expectations in `commit_verify`
-          (verify : C → D → pmf M)
+          (verify : C → D → M)
 
           (BindingAdversary : pmf (C × D × D)) 
-          (HidingAdversary : (M × M))
+          (HidingAdversary : pmf (M × M))
 
 /-
 Simulates running the program and returns 1 with prob 1 if verify holds
+`d : D` is passed in rather than generate by the commiter
 -/
 def commit_verify (m : M) (d : D) : pmf (zmod 2) := 
 do 
@@ -57,8 +58,8 @@ def commitment_correctness : Prop := ∀ (m : M) (d : D), commit_verify commit v
 def BG : pmf (zmod 2) :=
 do 
   bc ← BindingAdversary,
-  m₀ ← verify bc.1 bc.2.1,
-  m₁ ← verify bc.1 bc.2.2,
+  let m₀ := verify bc.1 bc.2.1,
+  let m₁ := verify bc.1 bc.2.2,
   pure (if m₀ = m₁ then 0 else 1) -- reverse if-else result since we want the negation
 
 local notation `Pr[BG(A)]` := (BG verify BindingAdversary 1 : ℝ) -- #check BG seems reversed?
@@ -69,10 +70,17 @@ def binding_property (ε : nnreal) : Prop := abs (Pr[BG(A)] - 1/2) ≤ ε
   Hiding: "commitment c does not leak information about m (either perfect secrecy, or computational indistinguishability)"
 -/
 
-def HG : pmf (zmod 2):= 
+def HG (d : D) : pmf (zmod 2):= 
 do 
-  hm ← HidingAdversary,
+  hc ← HidingAdversary,
+  b ← uniform_2,
+  c ← commit hc.(b.val) d,
+  b' ← A(c),
+  pure (if b = b' 1 else 0)
 
+local notation `Pr[HG(A)]` := (HG verify HidingAdversary 1 : ℝ) 
+
+def hiding_property (ε : nnreal) : Prop := abs (Pr[HG(A)] - 1/2) ≤ ε
 
 -- game where adv. generates two messages
 -- commiter commits to one chosen at random
