@@ -28,14 +28,19 @@ Verification phase:
 4. R accepts or rejects commitment depending on result of verification.
 -/
 
--- (not an exact match to the above)
+/-
+From Boneh & Shoup:
+A security parameter (λ) and system parameter (Λ) are used to index families of key spaces, message spaces and ciphertext spaces. 
+-/
+
 variables {M D C : Type} [decidable_eq M]
           (gen : D) -- a generator for the opening value, *not* for public parameters pκ 
-          (commit : M → D → pmf C) -- C must be pmf to match monadic expectations in `commit_verify` TODO: change return to pair
-          (verify : C → D → M) -- TODO: verify should be a boolean
+          (commit : M → pmf (C × D) ) -- C must be pmf to match monadic expectations in `commit_verify`
+          (verify : C → D → M → bool)
 
-          (BindingAdversary : pmf (C × D × D)) 
+          (BindingAdversary : pmf (C × D × D × M × M)) 
           (HidingAdversary : pmf (M × M))
+          (A : (C × D) → zmod 2)
 
 /-
 Simulates running the program and returns 1 with prob 1 if verify holds
@@ -43,8 +48,8 @@ Simulates running the program and returns 1 with prob 1 if verify holds
 -/
 def commit_verify (m : M) (d : D) : pmf (zmod 2) := 
 do 
-  c ← commit m d, 
-  pure (if verify c d = m then 1 else 0) 
+  c ← commit m, 
+  pure (if verify c.1 c.2 m then 1 else 0) 
 
 /- 
   A commitment protocol is correct if verification undoes 
@@ -53,14 +58,12 @@ do
 def commitment_correctness : Prop := ∀ (m : M) (d : D), commit_verify commit verify m d = pure 1 
 
 /-
-  Binding: "no adversary (either powerful or computationally bounded) can generate c, m 6 = m′ and d, d′ such that both Verify(c, m, d) and Verify(c, m′, d′) accept"
+  Binding: "no adversary (either powerful or computationally bounded) can generate c, m = m' and d, d' such that both Verify(c, m, d) and Verify(c, m', d') accept"
 -/
 def BG : pmf (zmod 2) :=
 do 
   bc ← BindingAdversary,
-  let m₀ := verify bc.1 bc.2.1,
-  let m₁ := verify bc.1 bc.2.2,
-  pure (if m₀ = m₁ then 0 else 1) -- reverse if-else result since we want the negation
+  pure (if verify bc.1 bc.2.1 bc.2.2.2.1 = verify bc.1 bc.2.2.1 bc.2.2.2.2 then 0 else 1) -- reverse if-else result since we want the negation
 
 local notation `Pr[BG(A)]` := (BG verify BindingAdversary 1 : ℝ) -- #check BG seems reversed?
 
@@ -74,8 +77,8 @@ def HG (d : D) : pmf (zmod 2):=
 do 
   hc ← HidingAdversary,
   b ← uniform_2,
-  c ← commit hc.(b.val) d,
-  b' ← A(c),
+  c ← commit hc.1,
+  let b' := A c,
   pure (if b = b' 1 else 0)
 
 local notation `Pr[HG(A)]` := (HG verify HidingAdversary 1 : ℝ) 
