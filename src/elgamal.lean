@@ -91,8 +91,8 @@ do
   m ← A1 gx,
   b ← uniform_2,
   mb ← pure (if b = 0 then m.1 else m.2.1),
-  b' ← A2 gy (gz * mb) m.2.2,
-  pure (1 + b + b')
+  b' ← A2 gy (gz * mb) m.2.2, -- Katz & Lindell theorem 12.18 (elgamal)
+  pure (1 + b + b') -- output the same bit - means it was able to break the encryption
 
 /- 
   The probability of the attacker (i.e. the composition of A1 and A2) 
