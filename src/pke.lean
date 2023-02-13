@@ -42,7 +42,6 @@ do
   encryption with probability 1
 -/
 
--- I'm not really sure what this is... Is this a proof?
 def pke_correctness : Prop := ∀ (m : M), enc_dec keygen encrypt decrypt m = pure 1 -- This chain of encryption/decryption matches the monadic actions in the `enc_dec` function
 
 #check pke_correctness
