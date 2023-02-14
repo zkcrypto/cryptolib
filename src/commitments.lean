@@ -33,8 +33,8 @@ From Boneh & Shoup:
 A security parameter (λ) and system parameter (Λ) are used to index families of key spaces, message spaces and ciphertext spaces. 
 -/
 
-variables {M D C : Type} [decidable_eq M]
-          (gen : D) -- a generator for the opening value, *not* for public parameters pκ 
+variables {G M D C : Type}
+          (gen : G) -- generates the public parameter, h ∈ G
           (commit : M → pmf (C × D) ) -- C must be pmf to match monadic expectations in `commit_verify`
           (verify : C → D → M → bool)
 
