@@ -37,7 +37,6 @@ variables {G M D C : Type}
           (gen : G) -- generates the public parameter, h ∈ G
           (commit : M → pmf (C × D) ) -- C must be pmf to match monadic expectations in `commit_verify`
           (verify : C → D → M → bool)
-
           (BindingAdversary : pmf (C × D × D × M × M)) 
           (HidingAdversary : pmf (M × M))
           (A : (C × D) → zmod 2)
@@ -65,7 +64,7 @@ do
   bc ← BindingAdversary,
   pure (if verify bc.1 bc.2.1 bc.2.2.2.1 = verify bc.1 bc.2.2.1 bc.2.2.2.2 then 0 else 1) -- reverse if-else result since we want the negation
 
-local notation `Pr[BG(A)]` := (BG verify BindingAdversary 1 : ℝ) -- #check BG seems reversed?
+local notation `Pr[BG(A)]` := (BG verify BindingAdversary 1 : ℝ)
 
 def binding_property (ε : nnreal) : Prop := abs (Pr[BG(A)] - 1/2) ≤ ε
 
