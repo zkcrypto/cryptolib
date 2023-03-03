@@ -19,13 +19,13 @@ variables (G : Type) [fintype G] [group G]
 
 include g_gen_G G_card_q -- assumptions used in the game reduction 
 
-def CDH : pmf G := 
+def CDH : pmf (zmod 2) := 
 do 
   α ← uniform_zmod q,
   β ← uniform_zmod q,
   let ω := g^(α.val * β.val),  
   ω' ← A (g^α.val) (g^β.val),
-  pure ω'
+  pure (if ω = ω' then 1 else 0) -- ??
 
 -- CDHadv[A] is the probability that ω = ω'
 -- Should CDH be a Prop? Not sure how to get both ω and ω' out to compare outside of the def

@@ -21,7 +21,7 @@ variables {G1 G2 M C A_state: Type} [decidable_eq M]
           (encrypt : G1 → M → pmf C)
           (decrypt : G2 → C → M)
           (A1 : G1 → pmf (M × M × A_state))
-          (A2 : C → A_state → pmf (zmod 2))
+          (A2 : C → A_state → pmf (zmod 2)) -- Should have G1 else how can A2 do further encryptions? Any general result about encryptions before getting challenge ciphertext...?
 
 /- 
   Executes the a public-key protocol defined by keygen,

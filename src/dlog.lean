@@ -8,16 +8,16 @@ section DL
 variables (G : Type) [fintype G] [group G]
           (g : G) (g_gen_G : ∀ (x : G), x ∈ subgroup.gpowers g) 
           (q : ℕ) [fact (0 < q)] (G_card_q : fintype.card G = q) 
-          (A : G → pmf G)
+          (A : G → pmf (zmod q))
 
 include g_gen_G G_card_q -- assumptions used in the game reduction
 
-def DL : pmf G := 
+def DL : pmf (zmod 2) := 
 do 
   α ← uniform_zmod q,
   let u := g^α.val,
   α' ←  A u,
-  pure α'
+  pure (if α = α' then 1 else 0)
 
 -- -- From DDH:
 -- -- DDH0(D) is the event that D outputs 1 upon receiving (g^x, g^y, g^(xy))
