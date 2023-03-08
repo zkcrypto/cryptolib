@@ -26,8 +26,9 @@ do
 -- -- DDH1(D) is the event that D outputs 1 upon receiving (g^x, g^y, g^z)
 -- local notation `Pr[DDH1(D)]` := (DDH1 G g g_gen_G q G_card_q D 1 : ℝ)
 
+local notation `Pr[DL(A)]` := (DL G g g_gen_G q G_card_q A 1 : ℝ)
 
-def DLadv : Prop := sorry
+def DLadv (ε: nnreal) : Prop := abs (Pr[DL(A)] - 1/2) ≤ ε
 
 
 #check DL G g g_gen_G q G_card_q A 
