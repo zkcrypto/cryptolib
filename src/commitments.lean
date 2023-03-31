@@ -100,9 +100,8 @@ def computational_binding_property (ε : nnreal) : Prop := abs (Pr[BG(A)] - 1/2)
 -/
 -- Split into two phases: 1. return two M; 2. return bit
 
-def docommit (m : M) : pmf C :=
+def docommit (h : G) (m : M) : pmf C :=
 do
-  h ← gen,
   c ← commit h m, 
   pure c.1 -- return just the commit, not the opening value
 
@@ -114,7 +113,7 @@ do
 -- Perf. hiding as equality between pmfs ∀m1,m2 
 -- Pedersen commitments are uniform so equivalence shows 
 
-def perfect_hiding_property : Prop := ∀ (m1 m2 : M), docommit gen commit m1 = docommit gen commit m2 -- This is an equality between distributions - how is this proved?
+def perfect_hiding_property : Prop := ∀ (h : G) (m1 m2 : M), docommit commit h m1 = docommit commit h m2 -- This is an equality between distributions - how is this proved?
 
 #check docommit
 def HG : pmf (zmod 2) := 
