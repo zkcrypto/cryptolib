@@ -38,10 +38,19 @@ do
   y ← uniform_zmod 5,
   pure (y + x)
 
+def p2' := 3 
+
+#check p2'
+
 example : p1 = p2 :=
 begin
   simp [p1, p2], 
   bind_skip with x, 
   bind_skip with y,
   simp_rw add_comm,
+end
+
+example : p1 = p2' :=
+begin
+
 end

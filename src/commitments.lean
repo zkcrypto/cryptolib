@@ -8,6 +8,7 @@ import data.zmod.basic
 import measure_theory.probability_mass_function
 import to_mathlib
 import uniform
+import tactics
 
 noncomputable theory 
 
@@ -34,7 +35,7 @@ A security parameter (λ) and system parameter (Λ) are used to index families o
 -/
 
 variables {G M D C A_state : Type} [decidable_eq M]
-          (gen : pmf G) -- generates the public parameter, h ∈ G
+          (gen : pmf (G × G) ) -- generates the public parameter, h ∈ G, and secret key a ∈ G
           (commit : G → M → pmf (C × D) )
           (verify : G → C → D → M → zmod 2)
           (BindingAdversary : G → pmf (C × D × D × M × M)) -- how to ensure these are two different Ms?
@@ -48,11 +49,15 @@ Simulates running the program and returns 1 with prob 1 if verify holds
 -- but we don't need d here now, since we're generating h...
 -/
 
+-- def gen : pmf (G × G) :=
+-- do  
+
+
 def commit_verify (m : M) : pmf (zmod 2) := -- formerly included a (d : D) parameter
 do 
   h ← gen, 
-  c ← commit h m, 
-  pure (if verify h c.1 c.2 m = 1 then 1 else 0) --c.2 is the opening value
+  c ← commit h.1 m, 
+  pure (if verify h.1 c.1 c.2 m = 1 then 1 else 0) --c.2 is the opening value
 
 /- 
   A commitment protocol is correct if verification undoes 
@@ -74,19 +79,19 @@ def commitment_correctness : Prop := ∀ (m : M), commit_verify gen commit verif
 def BG : pmf (zmod 2) :=
 do 
   h ← gen, 
-  bc ← BindingAdversary h, --pmf (C × D × D × M × M)
+  bc ← BindingAdversary h.1, --pmf (C × D × D × M × M)
   -- Def. of binding in B&S pg. 337
   -- As per comment above - how to ensure the Ms are unique?
   -- Verify that both return 1
   -- Commitments are valid commitments to a message
-  let b := verify h bc.1 bc.2.1 bc.2.2.2.1,
-  let b' := verify h bc.1 bc.2.2.1 bc.2.2.2.2,
+  let b := verify h.1 bc.1 bc.2.1 bc.2.2.2.1,
+  let b' := verify h.1 bc.1 bc.2.2.1 bc.2.2.2.2,
   -- let b'' := (if bc.2.2.2.1 = bc.2.2.2.2 
   pure (if bc.2.2.2.1 = bc.2.2.2.2 then 0 else b * b')
   
 local notation `Pr[BG(A)]` := (BG gen verify BindingAdversary 1 : ℝ)
 
-def computational_binding_property (ε : nnreal) : Prop := abs (Pr[BG(A)] - 1/2) ≤ ε -- the 1/2 term is necessary here?
+def computational_binding_property (ε : nnreal) : Prop := abs (Pr[BG(A)] - 1/2) ≤ ε 
 
 #check computational_binding_property
 
@@ -105,6 +110,12 @@ do
   c ← commit h m, 
   pure c.1 -- return just the commit, not the opening value
 
+def docommit' (m : M) : pmf C :=
+do
+  keypair ← gen,
+  let h := keypair.1,  
+  c ← commit h m, 
+  pure c.1
 
 -- Perfect hiding strategy: Use uniformity prop. of group to replace the commit with something completely random
 -- Adv with no knowledge of the message can't guess the message with greater prob than 1/|M|
@@ -113,7 +124,36 @@ do
 -- Perf. hiding as equality between pmfs ∀m1,m2 
 -- Pedersen commitments are uniform so equivalence shows 
 
-def perfect_hiding_property : Prop := ∀ (h : G) (m1 m2 : M), docommit commit h m1 = docommit commit h m2 -- This is an equality between distributions - how is this proved?
+
+-- This is an equality between distributions - how is this proved?
+-- Need probablistic statement to compare two commits
+
+
+-- def perfect_hiding_property : Prop := ∀ (h : G) (m1 m2 : M), docommit' gen commit m1 = docommit' gen commit m2 := 
+
+theorem perfect_hiding_property : ∀ (h : G) (m1 m2 : M), docommit' gen commit m1 = docommit' gen commit m2 := 
+begin
+  intros,
+  simp [docommit', bind],
+  bind_skip,
+  sorry,
+end
+
+
+theorem perfect_hiding_property' : ∀ (h : G) (m1 m2 : M), docommit commit h m1 = docommit commit h m2 :=
+begin
+  intros,
+  simp [docommit, bind, pure],
+  sorry,
+end
+
+variables (m : M) (c : C)
+#check docommit' gen commit m c
+
+theorem perfect_hiding_property'' : ∀ (h : G) (m1 m2 : M) (c : C), docommit' gen commit m1 c = docommit' gen commit m2 c := 
+begin
+  sorry,
+end
 
 #check docommit
 def HG : pmf (zmod 2) := 
@@ -137,3 +177,13 @@ def computational_hiding_property (ε : nnreal) : Prop := abs (Pr[HG(A)] - 1/2) 
 
 -- Also need perfect hiding
 -- Definition of perfect binding...? Has anyone written this down?
+
+
+-- Commitment notes (perfect hiding)
+-- How is c chosen? Adversarially?
+-- ∀c : C, for all pair x, x', the prob that commit(x) = c is equal to the prob that commit(x') = c
+-- Proof: There is exactly one r (Pedersen we have uniqueness)
+  -- because cyclic prime order
+  -- given any c
+  -- given any g
+-- Oblivious sampleability (can sample without going through commit scheme)

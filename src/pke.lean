@@ -45,7 +45,6 @@ do
 def pke_correctness : Prop := ∀ (m : M), enc_dec keygen encrypt decrypt m = pure 1 -- This chain of encryption/decryption matches the monadic actions in the `enc_dec` function
 
 #check pke_correctness
-#check pke_correctness keygen
 /- 
   The semantic security game. 
   Returns 1 if the attacker A2 guesses the correct bit

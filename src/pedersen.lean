@@ -2,7 +2,6 @@
 import dlog
 import commitments
 
-
 section pedersen
 
 noncomputable theory 
@@ -11,7 +10,7 @@ variables {M : Type}
           (G : Type) [fintype G] [group G] [decidable_eq G]
           (g : G) (g_gen_G : ∀ (x : G), x ∈ subgroup.gpowers g) 
           (q : ℕ) [fact (0 < q)] (G_card_q : fintype.card G = q) 
-          (A : G → pmf G)
+          (A : G → (pmf (G × zmod q) × zmod q × zmod q × G × G))
 
 include g_gen_G G_card_q -- assumptions used in the game reduction
 
@@ -39,19 +38,26 @@ do
   y ← uniform_zmod q,
   pure (g^m.val * h^y.val, y)
 
-
 -- verify : G → C → D → M → bool
 def verify (h : G) (c : G) (d : zmod q) (m : zmod q) : zmod 2 :=
 let c' := g^m.val * h^d.val in if c' = c then 1 else 0
 
+-- Previously had as follows, but problems with the use of ite 
+-- def verify' (h : G) (c : G) (d : zmod q) (m : zmod q) : zmod 2 :=
 -- do 
---   -- let c' := commit h m, 
 --   let c' := g^m.val * h^d.val,
 --   pure (if c' = c then 1 else 0) 
 
 
 -- BindingAdversary : G → pmf (C × D × D × M × M)
-def BindingAdversary (h : G) : pmf (G × zmod q × zmod q × M × M) := sorry
+def BindingAdversary (h : G) : pmf (zmod q × zmod q × G × G) :=
+do
+  let r := (A h).2.1,
+  let x := (A h).2.2.2.1,
+  let r' := (A h).2.2.1,
+  let x' := (A h).2.2.2.2,
+  let c := (A h).1,
+  pure (if (g^x.val * h^r.val) = c.1 then 1 else 0)
 
 /- 
   The probability of the binding adversary winning the security game (i.e. finding messages, m and m', and opening values, o and o', such that they both resolve to the same commitment c), is equal to the probability of A winning the game DL. 
@@ -59,7 +65,7 @@ def BindingAdversary (h : G) : pmf (G × zmod q × zmod q × M × M) := sorry
 
 #check BG
 
-theorem BG_DL : BG gen BindingAdversary verify  =  DL ?? :=
+theorem BG_DL : BG gen A verify  =  DL ?? :=
 begin
   sorry,
 end
