@@ -5,7 +5,7 @@
 -/
 
 import data.zmod.basic
-import measure_theory.probability_mass_function
+import probability.probability_mass_function.basic
 import to_mathlib
 import uniform
 
@@ -35,8 +35,6 @@ do
   c ← encrypt k.1 m, -- encrypts m using pk
   pure (if decrypt k.2 c = m then 1 else 0) -- decrypts using sk and checks for equality with m
 
-#check enc_dec
-
 /- 
   A public-key encryption protocol is correct if decryption undoes 
   encryption with probability 1
@@ -44,7 +42,6 @@ do
 
 def pke_correctness : Prop := ∀ (m : M), enc_dec keygen encrypt decrypt m = pure 1 -- This chain of encryption/decryption matches the monadic actions in the `enc_dec` function
 
-#check pke_correctness
 /- 
   The semantic security game. 
   Returns 1 if the attacker A2 guesses the correct bit
@@ -59,8 +56,6 @@ do
   pure (1 + b + b')
 
 -- SSG(A) denotes the event that A wins the semantic security game
-local notation `Pr[SSG(A)]` := (SSG keygen encrypt A1 A2 1 : ℝ)
+local notation `Pr[SSG(A)]` := (SSG keygen encrypt A1 A2 1)
 
 def pke_semantic_security (ε : nnreal) : Prop := abs (Pr[SSG(A)] - 1/2) ≤ ε 
-
-#check Pr[SSG(A)]

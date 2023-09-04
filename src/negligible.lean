@@ -7,10 +7,11 @@
  -----------------------------------------------------------
 -/
 
-import analysis.special_functions.exp_log
-import analysis.special_functions.pow
+import analysis.special_functions.log.basic
+import analysis.special_functions.pow.nnreal
 import data.nat.basic
 import data.real.basic
+import tactic.monotonicity.
 
 /- 
   A function f : ℤ≥1 → ℝ is called negligible if 
@@ -123,7 +124,7 @@ begin
     rw n_eq_nr at j,
     norm_num at j,
     exact j,
-    exact real.nontrivial,
+    exact is_R_or_C.char_zero_R_or_C,
   end,
   have tnr_pos : 0 < nr := by linarith,
 
@@ -226,7 +227,7 @@ begin
     have goal : abs (m * f n) ≤ abs ((k : ℝ) * f n) := 
     calc 
       abs (m * f n) = abs m * abs (f n) : by rw abs_mul
-                ... ≤ abs (k : ℝ) * abs (f n) : mul_mono_nonneg (abs_nonneg (f n)) h
+                ... ≤ abs (k : ℝ) * abs (f n) : mul_le_mul_of_nonneg_right h (abs_nonneg (f n))
                 ... = abs ((k : ℝ) * f n) : by rw <- abs_mul,
       
     exact goal,

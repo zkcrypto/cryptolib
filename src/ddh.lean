@@ -4,7 +4,7 @@
  -----------------------------------------------------------
 -/
 
-import measure_theory.probability_mass_function 
+import probability.probability_mass_function.basic
 import to_mathlib
 import uniform
 
@@ -13,8 +13,8 @@ noncomputable theory
 section DDH
 
 variables (G : Type) [fintype G] [group G]
-          (g : G) (g_gen_G : ∀ (x : G), x ∈ subgroup.gpowers g) 
-          (q : ℕ) [fact (0 < q)] (G_card_q : fintype.card G = q) 
+          (g : G) (g_gen_G : ∀ (x : G), x ∈ subgroup.zpowers g) 
+          (q : ℕ) [ne_zero q] (G_card_q : fintype.card G = q) 
           -- check Mario, 0 < q necessary for fintype.card?
           (D : G → G → G → pmf (zmod 2))
 
@@ -36,10 +36,10 @@ do
   pure b
 
 -- DDH0(D) is the event that D outputs 1 upon receiving (g^x, g^y, g^(xy))
-local notation `Pr[DDH0(D)]` := (DDH0 G g g_gen_G q G_card_q D 1 : ℝ)
+local notation `Pr[DDH0(D)]` := (DDH0 G g g_gen_G q G_card_q D 1)
 
 -- DDH1(D) is the event that D outputs 1 upon receiving (g^x, g^y, g^z)
-local notation `Pr[DDH1(D)]` := (DDH1 G g g_gen_G q G_card_q D 1 : ℝ)
+local notation `Pr[DDH1(D)]` := (DDH1 G g g_gen_G q G_card_q D 1)
 
 def DDH (ε : nnreal) : Prop := abs (Pr[DDH0(D)] - Pr[DDH1(D)]) ≤ ε
 

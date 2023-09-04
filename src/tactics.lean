@@ -1,4 +1,5 @@
-import measure_theory.probability_mass_function
+import probability.probability_mass_function.basic
+import probability.probability_mass_function.monad
 
 variables {α β : Type}
 
@@ -18,7 +19,7 @@ begin
   ext,
   simp,
   simp_rw ha,
-  simp [nnreal.tsum_mul_right],
+  simp [ennreal.tsum_mul_right],
 end
 
 setup_tactic_parser
