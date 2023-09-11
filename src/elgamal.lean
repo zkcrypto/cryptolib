@@ -16,8 +16,8 @@ section elgamal
 noncomputable theory 
 
 parameters (G : Type) [fintype G] [comm_group G] [decidable_eq G] 
-           (g : G) (g_gen_G : ∀ (x : G), x ∈ subgroup.gpowers g)
-           (q : ℕ) [fact (0 < q)] (G_card_q : fintype.card G = q) 
+           (g : G) (g_gen_G : ∀ (x : G), x ∈ subgroup.zpowers g)
+           (q : ℕ) [ne_zero q] (G_card_q : fintype.card G = q) 
            (A_state : Type)
 
 include g_gen_G G_card_q
@@ -187,7 +187,7 @@ begin
           ... = g ^ zq : rfl,
         exact goal.symm, 
       },
-      exact nat.mod_lt z _inst_4.out,
+      exact nat.mod_lt z (nat.pos_of_ne_zero _inst_4.out),
     },
 
     { -- Case : z = - (1 + z') for (z' : ℕ)
@@ -201,15 +201,15 @@ begin
         begin
           rw G_card_q,
           apply le_of_lt,
-          exact nat.mod_lt _ _inst_4.out,
+          exact nat.mod_lt _ (nat.pos_of_ne_zero _inst_4.out),
         end,
 
         have goal : gz = g ^ zq := 
         calc
            gz = g ^ int.neg_succ_of_nat z : hz.symm 
-          ... = (g ^ z.succ)⁻¹  : by rw gpow_neg_succ_of_nat
+          ... = (g ^ z.succ)⁻¹  : by rw zpow_neg_succ_of_nat
           ... = (g ^ (z + 1))⁻¹ : rfl
-          ... = (g ^ ((z + 1) % fintype.card G))⁻¹ : by rw pow_eq_mod_card G g (z + 1)
+          ... = (g ^ ((z + 1) % fintype.card G))⁻¹ : by rw pow_eq_mod_card (z + 1)
           ... = (g ^ ((z + 1) % q))⁻¹ : by rw G_card_q
           ... = g ^ (fintype.card G - (z + 1) % q) : inv_pow_eq_card_sub_pow G g _ h1
           ... = g ^ (q - ((z + 1) % q)) : by rw G_card_q
@@ -226,7 +226,7 @@ begin
         exact goal.symm, 
       },
 
-      exact nat.mod_lt _ _inst_4.out,  
+      exact nat.mod_lt _ (nat.pos_of_ne_zero _inst_4.out),  
     },
   },
 
@@ -244,7 +244,7 @@ begin
   apply function.bijective.comp,
 
   { -- (λ (m : G), (m * mb)) bijective
-    refine fintype.injective_iff_bijective.mp _,
+    refine finite.injective_iff_bijective.mp _,
     intros x a hxa,
     simp at hxa,
     exact hxa,
@@ -294,11 +294,17 @@ begin
   simp only [pure, pmf.pure, coe_fn, has_coe_to_fun.coe, nnreal.tsum_mul_left],
   norm_cast,
   simp,
-  apply or.intro_left,
+  apply or.intro_left, -- tried apply iff.intro here, but that seems like maybe a deadend...
   repeat {rw G1_G2_lemma1 x},
-  exact exp_bij,
+  rw G1_G2_lemma1 _ _ (exp_mb_bij mb),
+  intros,
   exact exp_mb_bij mb,
 end
+
+#check exp_bij
+#check G1_G2_lemma1 _ _ (exp_mb_bij _)
+#check G1_G2_lemma1
+#check exp_mb_bij 
  
 lemma G1_G2_lemma3 (m : pmf G) : 
   m.bind (λ (mb : G), (uniform_zmod q).bind (λ (z : zmod q), pure (g^z.val * mb))) =
@@ -405,7 +411,7 @@ theorem elgamal_semantic_security (DDH_G : DDH G g g_gen_G q G_card_q D ε) :
 begin
   simp only [pke_semantic_security],
   rw SSG_DDH0,
-  have h : (((uniform_2) 1) : ℝ) = 1/2 := 
+  have h : (((uniform_2) 1) : ennreal) = 1/2 := 
   begin
     simp only [uniform_2],
     rw uniform_zmod_prob 1,
