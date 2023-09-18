@@ -15,14 +15,14 @@ section elgamal
 
 noncomputable theory 
 
-parameters (G : Type) [fintype G] [comm_group G] [decidable_eq G] 
+variables (G : Type) [fintype G] [comm_group G] [decidable_eq G] 
            (g : G) (g_gen_G : ∀ (x : G), x ∈ subgroup.zpowers g)
            (q : ℕ) [ne_zero q] (G_card_q : fintype.card G = q) 
            (A_state : Type)
 
 include g_gen_G G_card_q
 
-parameters (A1 : G → pmf (G × G × A_state))
+variables (A1 : G → pmf (G × G × A_state))
            (A2 : G → G → A_state → pmf (zmod 2))
            
 def A2' : G × G → A_state → pmf (zmod 2) := λ (gg : G × G), A2 gg.1 gg.2
@@ -46,34 +46,36 @@ do
 def decrypt (x : zmod q)(c : G × G) : G := 
 	(c.2 / (c.1^x.val)) 
 
-
-
 /- 
   -----------------------------------------------------------
   Proof of correctness of ElGamal
   -----------------------------------------------------------
 -/
 
-lemma decrypt_eq_m (m : G) (x y: zmod q) : decrypt x ((g^y.val), ((g^x.val)^y.val * m)) = m := 
+lemma decrypt_eq_m (m : G) (x y: zmod q) : decrypt G g g_gen_G q G_card_q x ((g^y.val), ((g^x.val)^y.val * m)) = m := 
 begin
   simp [decrypt],
-  rw (pow_mul g x.val y.val).symm,
-  rw (pow_mul g y.val x.val).symm,
+  repeat {rw (pow_mul _ _ _).symm},
   rw mul_comm y.val x.val,
   repeat {rw group.div_eq_mul_inv},
-  conv_lhs {rw [mul_assoc, mul_comm m _, <- mul_assoc]},
-  rw mul_inv_self _,
+  rw [mul_assoc, mul_comm m _, <- mul_assoc, mul_inv_self _],
+  -- conv_lhs {rw [mul_assoc, mul_comm m _, <- mul_assoc]},
   exact one_mul m,
 end
 
-theorem elgamal_correctness : pke_correctness keygen encrypt decrypt :=
+-- set_option trace.ext true
+-- set_option trace.simplify true
+
+
+theorem elgamal_correctness : pke_correctness (keygen G g g_gen_G q G_card_q) (encrypt G g g_gen_G q G_card_q) (decrypt G g g_gen_G q G_card_q) :=
 begin
-  simp [pke_correctness],
-  intro m,
-  simp [enc_dec, keygen, encrypt, bind],
-  bind_skip_const with x,
-  simp [pure],
-  bind_skip_const with y,
+  simp_intros [pke_correctness],
+  -- intro m,
+  -- simp [enc_dec, keygen, encrypt, bind],
+  -- bind_skip_const with x,
+  -- simp [pure],
+  -- bind_skip_const with y,
+  simp [enc_dec, keygen, encrypt, bind, pure],
   simp_rw decrypt_eq_m,
   simp,
 end
@@ -88,8 +90,8 @@ end
 
 def D (gx gy gz : G) : pmf (zmod 2) := 
 do 
-  m ← A1 gx,
-  b ← uniform_2,
+  m ← A1 gx, -- give G, g, q, h_1 (gx) to A1 and run to get two messages
+  b ← uniform_2, -- choose b uniformly
   mb ← pure (if b = 0 then m.1 else m.2.1),
   b' ← A2 gy (gz * mb) m.2.2, -- Katz & Lindell theorem 12.18 (elgamal)
   pure (1 + b + b') -- output the same bit - means it was able to break the encryption
@@ -99,7 +101,9 @@ do
   winning the semantic security game (i.e. guessing the correct bit), 
   w.r.t. ElGamal is equal to the probability of D winning the game DDH0. 
 -/
-theorem SSG_DDH0 : SSG keygen encrypt A1 A2' =  DDH0 G g g_gen_G q G_card_q D :=
+
+
+theorem SSG_DDH0 : SSG (keygen G g g_gen_G q G_card_q) (encrypt G g g_gen_G q G_card_q) A1 (A2' G g g_gen_G q G_card_q A_state A2) =  DDH0 G g g_gen_G q G_card_q (D G g g_gen_G q G_card_q A_state A1 A2):=
 begin
   simp only [SSG, DDH0, bind, keygen, encrypt, D],
   simp_rw pmf.bind_bind (uniform_zmod q),
@@ -112,6 +116,7 @@ begin
   simp only [A2'],
   rw pow_mul g x.val y.val,
 end
+
 
 def Game1 : pmf (zmod 2) :=
 do 
@@ -138,7 +143,8 @@ do
   winning Game1 (i.e. guessing the correct bit) is equal to the 
   probability of D winning the game DDH1. 
 -/
-theorem Game1_DDH1 : Game1 = DDH1 G g g_gen_G q G_card_q D := 
+
+theorem Game1_DDH1 : (Game1 G g g_gen_G q G_card_q A_state A1 A2) = DDH1 G g g_gen_G q G_card_q (D G g g_gen_G q G_card_q A_state A1 A2) := 
 begin
   simp only [DDH1, Game1, bind, D],
   bind_skip with x,
@@ -251,7 +257,7 @@ begin
   },
 
   { -- (λ (z : zmod q), g ^ z.val) bijective
-    exact exp_bij,
+    exact exp_bij G g g_gen_G q G_card_q,
   }
 end
 
@@ -290,10 +296,27 @@ lemma G1_G2_lemma2 (mb : G) :
 begin
   simp [pmf.bind],
   simp_rw uniform_zmod_prob,
-  ext,
-  simp only [pure, pmf.pure, coe_fn, has_coe_to_fun.coe, nnreal.tsum_mul_left],
+  apply funext,
+  intro,
+  -- ext,
+  simp only [pure],
+  simp only [pmf.pure],
+  simp only [coe_fn],
+  simp only [has_coe_to_fun.coe],
+  simp only [fun_like.coe],
+  simp only [ennreal.tsum_mul_left],
+  -- simp only [pure, pmf.pure, coe_fn, has_coe_to_fun.coe, nnreal.tsum_mul_left],
   norm_cast,
   simp,
+  rw @mul_eq_mul_left_iff ennreal ↑q _ _,
+  simp only [one_div, mul_eq_mul_left_iff, inv_eq_zero, nat.cast_eq_zero],
+  simp only [one_div],
+  congr' 2,
+  intros,
+  -- simp_rw [mul_eq_mul_left_iff] at *, -- Seems that this is not going to the same depth as the same tactic in 3.3? There is an extra simplification step in the 3.3 version that seems to reach the intended target
+  simp,
+  simp only [inv_eq_zero],
+  simp only [nat.cast_eq_zero], -- added trace.simplify true - must be something in here... 
   apply or.intro_left, -- tried apply iff.intro here, but that seems like maybe a deadend...
   repeat {rw G1_G2_lemma1 x},
   rw G1_G2_lemma1 _ _ (exp_mb_bij mb),
