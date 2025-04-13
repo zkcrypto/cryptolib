@@ -1,46 +1,52 @@
 /-
- -----------------------------------------------------------
-  The decisional Diffie-Hellman assumption as a security game
- -----------------------------------------------------------
+Copyright (c) 2021 Joey Lupo
+Released under Apache 2.0 license as described in the file LICENSE-APACHE.
+Authors: Joey Lupo
+-/
+import Cryptolib.ToMathlib
+import Cryptolib.Uniform
+import Mathlib.Probability.Distributions.Uniform
+
+/-!
+# The decisional Diffie-Hellman assumption as a security game
+
+This file provides a formal specification of the decisional Diffie-Hellman assumption on a
+finite cyclic group.
 -/
 
-import probability.probability_mass_function.basic
-import to_mathlib
-import uniform
-
-noncomputable theory
+noncomputable section
 
 section DDH
 
-variables (G : Type) [fintype G] [group G]
-          (g : G) (g_gen_G : ∀ (x : G), x ∈ subgroup.zpowers g)
-          (q : ℕ) [ne_zero q] (G_card_q : fintype.card G = q)
-          -- check Mario, 0 < q necessary for fintype.card?
-          (D : G → G → G → pmf (zmod 2))
+variable (G : Type) [Fintype G] [Group G]
+         (g : G) --(g_gen_G : ∀ (x : G), x ∈ Subgroup.zpowers g)
+         (q : ℕ) [NeZero q] --(G_card_q : Fintype.card G = q)
+         -- check Mario, 0 < q necessary for Fintype.card?
+         (D : G → G → G → PMF (ZMod 2))
 
-include g_gen_G G_card_q
+-- include g_gen_G G_card_q
 
-def DDH0 : pmf (zmod 2) :=
+def DDH0 : PMF (ZMod 2) :=
 do
-  x ← uniform_zmod q,
-  y ← uniform_zmod q,
-  b ← D (g^x.val) (g^y.val) (g^(x.val * y.val)),
+  let x ← uniform_zmod q
+  let y ← uniform_zmod q
+  let b ← D (g^x.val) (g^y.val) (g^(x.val * y.val))
   pure b
 
-def DDH1 : pmf (zmod 2) :=
+def DDH1 : PMF (ZMod 2) :=
 do
-  x ← uniform_zmod q,
-  y ← uniform_zmod q,
-  z ← uniform_zmod q,
-  b ← D (g^x.val) (g^y.val) (g^z.val),
+  let x ← uniform_zmod q
+  let y ← uniform_zmod q
+  let z ← uniform_zmod q
+  let b ← D (g^x.val) (g^y.val) (g^z.val)
   pure b
 
 -- DDH0(D) is the event that D outputs 1 upon receiving (g^x, g^y, g^(xy))
-local notation `Pr[DDH0(D)]` := (DDH0 G g g_gen_G q G_card_q D 1)
+local notation "Pr[DDH0(D)]" => (DDH0 G g q D 1)
 
 -- DDH1(D) is the event that D outputs 1 upon receiving (g^x, g^y, g^z)
-local notation `Pr[DDH1(D)]` := (DDH1 G g g_gen_G q G_card_q D 1)
+local notation "Pr[DDH1(D)]" => (DDH1 G g q D 1)
 
-def DDH (ε : nnreal) : Prop := abs (Pr[DDH0(D)] - Pr[DDH1(D)]) ≤ ε
+def DDH (ε : NNReal) : Prop := abs (Pr[DDH0(D)].toReal - Pr[DDH1(D)].toReal) ≤ ε
 
 end DDH
