@@ -47,8 +47,12 @@ This library is a work-in-progress merge, port, and refactor of several forks of
 All code in the `scratch` and `src` folders is licensed under Apache License, Version 2.0,
 along with the following files:
 
+- `Cryptolib/DecisionalDiffieHellman.lean`
+- `Cryptolib/ElGamal.lean`
 - `Cryptolib/Fundamentals/Negligible.lean`
 - `Cryptolib/Fundamentals/Uniform.lean`
+- `Cryptolib/PublicKeyEncryption.lean`
+- `Cryptolib/Tactic.lean`
 - `Cryptolib/ToMathlib.lean`
 
 All other code in this workspace is licensed under either of
