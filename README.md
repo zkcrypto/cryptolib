@@ -18,8 +18,6 @@ This library is a work-in-progress merge, port, and refactor of several forks of
     
 - `negligible.lean` - defines negligible functions and provides several useful lemmas regarding negligible functions
 
-- [pke.lean](src/pke.lean) - provides formal definitions for correctness and semantic security of a public key encryption scheme
-
 - [tactics.lean](src/tactics.lean) - provides the `bindskip` and `bindconst` tactics to help prove equivalences between pmfs
 
 - [rsa.lean](src/rsa.lean) - contains proof of correctness of the RSA public key encryption protocol
