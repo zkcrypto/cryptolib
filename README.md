@@ -12,8 +12,6 @@ This library is a work-in-progress merge, port, and refactor of several forks of
 
 ## Files in cryptolib
 
-- [elgamal.lean](src/elgamal.lean) - contains the formal specification of the ElGamal public key encryption protocol, and the formal proofs of correctness 
-
 - [rsa.lean](src/rsa.lean) - contains proof of correctness of the RSA public key encryption protocol
 
 - [substitution.lean](src/substitution.lean) - contains basic formalization and proof of correctness of different substitution ciphers
