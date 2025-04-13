@@ -1,5 +1,5 @@
 import data.bitvec.basic
-import data.zmod.basic 
+import data.zmod.basic
 import group_theory.specific_groups.cyclic
 import group_theory.subgroup.basic
 import group_theory.subgroup.pointwise
@@ -15,7 +15,7 @@ import probability.probability_mass_function.uniform
  ---------------------------------------------------------
 -/
 
-lemma range_pos_ne_zero (n : ℕ) (n_pos : 0 < n): multiset.range n ≠ 0 := 
+lemma range_pos_ne_zero (n : ℕ) (n_pos : 0 < n): multiset.range n ≠ 0 :=
 begin
   apply (multiset.card_pos).mp,
   rw multiset.card_range,
@@ -46,7 +46,7 @@ instance fintype : Π (n : ℕ), fintype (bitvec n) := by {intro n, exact vector
 
 lemma card (n : ℕ) : fintype.card (bitvec n) = 2^n := card_vector n
 
-lemma multiset_ne_zero (n : ℕ) : (bitvec.fintype n).elems.val ≠ 0 := 
+lemma multiset_ne_zero (n : ℕ) : (bitvec.fintype n).elems.val ≠ 0 :=
 begin
   apply (multiset.card_pos).mp,
   have h : multiset.card (fintype.elems (bitvec n)).val = 2^n := bitvec.card n,
@@ -54,7 +54,7 @@ begin
   simp only [pow_pos, nat.succ_pos'],
 end
 
--- missing bitvec lemmas used in streams ciphers. 
+-- missing bitvec lemmas used in streams ciphers.
 -- TODO: they need proof
 variable n : ℕ
 variables a b c : bitvec n
@@ -65,7 +65,7 @@ lemma zero_add : a = bitvec.zero n + a := by sorry
 lemma add_self_assoc : b = a + (a + b) :=
   by rw [←add_assoc, add_self, ←zero_add]
 
-lemma add_comm : a + b = b + a := 
+lemma add_comm : a + b = b + a :=
 begin
   -- idea: convert a and b to ℕ and prove comm there
   have ha := bitvec.to_nat a,
@@ -82,11 +82,11 @@ begin
   rw [←add_assoc_self, add_self, ←zero_add],
 end
 
-def to_list (length: ℕ) (B : bitvec length) : list bool := 
+def to_list (length: ℕ) (B : bitvec length) : list bool :=
   vector.to_list B
 
 
-end bitvec 
+end bitvec
 
 
 /-
@@ -95,12 +95,15 @@ end bitvec
  ---------------------------------------------------------
 -/
 
-namespace zmod 
+namespace zmod
 
-instance group : Π (n : ℕ) [fact (0 < n)], group (zmod n) := 
-  by {intros n h, exact multiplicative.group}
+-- instance group : Π (n : ℕ) [fact (0 < n)], group (zmod n) :=
+--   by {intros n h, exact multiplicative.group}
 
-end zmod 
+instance group (n : ℕ) : group (zmod n) :=
+  by {exact multiplicative.group}
+
+end zmod
 
 
 
@@ -110,7 +113,7 @@ end zmod
  ---------------------------------------------------------
 -/
 
-lemma exists_mod_add_div (a b: ℕ) : ∃ (m : ℕ), a = a % b + b * m := 
+lemma exists_mod_add_div (a b: ℕ) : ∃ (m : ℕ), a = a % b + b * m :=
 begin
   use (a/b),
   exact (nat.mod_add_div a b).symm,
@@ -128,11 +131,11 @@ variables (G : Type) [fintype G] [group G]
 
 namespace group
 
-lemma multiset_ne_zero : (fintype.elems G).val ≠ 0 := 
+lemma multiset_ne_zero : (fintype.elems G).val ≠ 0 :=
 begin
   have e : G := (_inst_2.one),
   have h1 : e ∈ (fintype.elems G).val :=  finset.mem_univ e,
-  have h2 : 0 < multiset.card (fintype.elems G).val := 
+  have h2 : 0 < multiset.card (fintype.elems G).val :=
   begin
     apply (multiset.card_pos_iff_exists_mem).mpr,
     exact Exists.intro e h1,
@@ -140,7 +143,7 @@ begin
   exact multiset.card_pos.mp h2,
 end
 
-end group 
+end group
 
 /-
  ---------------------------------------------------------
@@ -150,13 +153,13 @@ end group
 
 namespace list
 
--- Given a list `l`, where each element is of type 
+-- Given a list `l`, where each element is of type
 -- `bitvec` of a given length `len`, convert this to a
--- `vector`, truncating the list at `len_vec` elements. 
-def to_vec_of_bitvec 
-  (len_bitvec : ℕ) (len_vec: ℕ) (l : list (bitvec len_bitvec)) : 
+-- `vector`, truncating the list at `len_vec` elements.
+def to_vec_of_bitvec
+  (len_bitvec : ℕ) (len_vec: ℕ) (l : list (bitvec len_bitvec)) :
   vector (bitvec len_bitvec ) len_vec :=
-    ⟨list.take' len_vec l, list.take'_length len_vec l⟩ 
+    ⟨list.take' len_vec l, list.take'_length len_vec l⟩
 
 end list
 

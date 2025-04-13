@@ -1,25 +1,25 @@
 import probability.probability_mass_function.basic
-import probability.probability_mass_function.constructions
+import probability.probability_mass_function.monad
 
 variables {α β : Type}
 
-lemma bind_skip' (p : pmf α) (f g : α → pmf β) : 
+lemma bind_skip' (p : pmf α) (f g : α → pmf β) :
   (∀ (a : α), f a = g a) → p.bind f = p.bind g :=
 begin
-  intro ha, 
+  intro ha,
   ext,
   simp only [pmf.bind_apply, nnreal.coe_eq],
   simp_rw ha,
 end
 
-lemma bind_skip_const' (pa : pmf α) (pb : pmf β) (f : α → pmf β) : 
+lemma bind_skip_const' (pa : pmf α) (pb : pmf β) (f : α → pmf β) :
   (∀ (a : α), f a = pb) → pa.bind f = pb :=
 begin
-  intro ha, 
+  intro ha,
   ext,
   simp only [pmf.bind_apply, nnreal.coe_eq],
   simp_rw ha,
-  simp [nnreal.tsum_mul_right],
+  simp [ennreal.tsum_mul_right],
 end
 
 setup_tactic_parser
