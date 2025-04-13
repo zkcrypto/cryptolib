@@ -16,8 +16,6 @@ This library is a work-in-progress merge, port, and refactor of several forks of
 	
 - [elgamal.lean](src/elgamal.lean) - contains the formal specification of the ElGamal public key encryption protocol, and the formal proofs of correctness 
 
-- [pke.lean](src/pke.lean) - provides formal definitions for correctness and semantic security of a public key encryption scheme
-
 - [tactics.lean](src/tactics.lean) - provides the `bindskip` and `bindconst` tactics to help prove equivalences between pmfs
 
 - [rsa.lean](src/rsa.lean) - contains proof of correctness of the RSA public key encryption protocol
