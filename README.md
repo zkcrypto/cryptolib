@@ -22,8 +22,6 @@ This library is a work-in-progress merge, port, and refactor of several forks of
 
 - [tactics.lean](src/tactics.lean) - provides the `bindskip` and `bindconst` tactics to help prove equivalences between pmfs
 
-- [to_mathlib.lean](src/to_mathlib.lean) - includes general lemmas for inclusion into mathlib
-
 - [uniform.lean](src/uniform.lean) - defines the uniform distribution over a finite group as a pmf, including the special case of Z_q, the integers modulo q, and provides two useful lemmas regarding uniform probabilities 
 
 - [rsa.lean](src/rsa.lean) - contains proof of correctness of the RSA public key encryption protocol
