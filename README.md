@@ -50,7 +50,20 @@ This library is a work-in-progress merge, port, and refactor of several forks of
 
 ## License
 
-All code in the `scratch` and `src` folders is licensed under Apache License, Version 2.0.
+All code in the `scratch` and `src` folders is licensed under Apache License, Version 2.0,
+along with the following files:
+
+- `Cryptolib/Commitments.lean`
+- `Cryptolib/ComputationalDiffieHellman.lean`
+- `Cryptolib/DecisionalDiffieHellman.lean`
+- `Cryptolib/DiscreteLog.lean`
+- `Cryptolib/ElGamal.lean`
+- `Cryptolib/Negligible.lean`
+- `Cryptolib/Pedersen.lean`
+- `Cryptolib/PublicKeyEncryption.lean`
+- `Cryptolib/Tactic.lean`
+- `Cryptolib/ToMathlib.lean`
+- `Cryptolib/Uniform.lean`
 
 All other code in this workspace is licensed under either of
 
