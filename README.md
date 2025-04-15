@@ -15,8 +15,6 @@ This library is a work-in-progress merge, port, and refactor of several forks of
 - `ddh.lean` - provides a formal specification of the decisional Diffie-Hellman assumption on a finite cyclic group
 	
 - [elgamal.lean](src/elgamal.lean) - contains the formal specification of the ElGamal public key encryption protocol, and the formal proofs of correctness 
-    
-- `negligible.lean` - defines negligible functions and provides several useful lemmas regarding negligible functions
 
 - [pke.lean](src/pke.lean) - provides formal definitions for correctness and semantic security of a public key encryption scheme
 
