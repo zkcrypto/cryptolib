@@ -12,8 +12,6 @@ This library is a work-in-progress merge, port, and refactor of several forks of
 
 ## Files in cryptolib
 
-- `negligible.lean` - defines negligible functions and provides several useful lemmas regarding negligible functions
-
 - [rsa.lean](src/rsa.lean) - contains proof of correctness of the RSA public key encryption protocol
 
 - [substitution.lean](src/substitution.lean) - contains basic formalization and proof of correctness of different substitution ciphers
