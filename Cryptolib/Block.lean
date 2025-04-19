@@ -4,53 +4,47 @@
  -----------------------------------------------------------
 -/
 
-import data.matrix.basic
-import data.zmod.basic
-import linear_algebra.matrix.nonsingular_inverse
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Data.ZMod.Basic
+import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
-open_locale matrix
+open scoped Matrix
 
-namespace hill
+namespace Hill
 
--- Hill cipher: A generalization of the affine cipher
---
--- If block = 2 then this is a digraphic cipher.
--- If block > 2 then this is a poligraphic cipher.
--- If block = 1 then this is a reduction to the affine cipher.
+/-!
+# Hill cipher: A generalization of the affine cipher
 
--- All operations will be mod 26.
+If block = 2 then this is a digraphic cipher.
+If block > 2 then this is a poligraphic cipher.
+If block = 1 then this is a reduction to the affine cipher.
+-/
+
+-- All operations will be mod 26 (English language character set).
 def m : ℕ := 26
 
 -- The size of the block
-variables block : ℕ
+variable (block : ℕ)
 
 -- The key matrix
-variable A : matrix (fin block) (fin block) (zmod m)
+variable (A : Matrix (Fin block) (Fin block) (ZMod m))
 
 -- The plaintext vector
-variable P : matrix (fin block) (fin 1) (zmod m)
+variable (P : Matrix (Fin block) (Fin 1) (ZMod m))
 
 -- The ciphertext vector
-variable C : matrix (fin block) (fin 1) (zmod m)
+variable (C : Matrix (Fin block) (Fin 1) (ZMod m))
 
 -- Encryption
-def encrypt :
-  matrix (fin block) (fin 1) (zmod m) := A ⬝ P
+def encrypt : (Matrix (Fin block) (Fin 1) (ZMod m)) := A * P
 
 -- Decryption
-noncomputable def decrypt : 
-  matrix (fin block) (fin 1) (zmod m) := A⁻¹ ⬝ P
+noncomputable def decrypt : (Matrix (Fin block) (Fin 1) (ZMod m)) := A⁻¹ * P
 
 -- Proof of correctness
-lemma dec_undoes_enc (h : A.det = 1): 
-  P = decrypt block A (encrypt block A P) :=
-begin
-  unfold encrypt,
-  unfold decrypt,
-  rw ← matrix.mul_assoc,
-  rw matrix.nonsing_inv_mul,
-  finish,
-  finish,
-end
+lemma dec_undoes_enc (h : A.det = 1): P = decrypt block A (encrypt block A P) := by
+  unfold encrypt
+  unfold decrypt
+  simp_all only [isUnit_one, Matrix.nonsing_inv_mul_cancel_left]
 
-end hill
+end Hill
