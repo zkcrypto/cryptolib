@@ -12,14 +12,6 @@ This library is a work-in-progress merge, port, and refactor of several forks of
 
 ## Files in cryptolib
 
-- `ddh.lean` - provides a formal specification of the decisional Diffie-Hellman assumption on a finite cyclic group
-	
-- [elgamal.lean](src/elgamal.lean) - contains the formal specification of the ElGamal public key encryption protocol, and the formal proofs of correctness 
-
-- [pke.lean](src/pke.lean) - provides formal definitions for correctness and semantic security of a public key encryption scheme
-
-- [tactics.lean](src/tactics.lean) - provides the `bindskip` and `bindconst` tactics to help prove equivalences between pmfs
-
 - [rsa.lean](src/rsa.lean) - contains proof of correctness of the RSA public key encryption protocol
 
 - [substitution.lean](src/substitution.lean) - contains basic formalization and proof of correctness of different substitution ciphers
@@ -47,8 +39,12 @@ This library is a work-in-progress merge, port, and refactor of several forks of
 All code in the `scratch` and `src` folders is licensed under Apache License, Version 2.0,
 along with the following files:
 
+- `Cryptolib/DecisionalDiffieHellman.lean`
+- `Cryptolib/ElGamal.lean`
 - `Cryptolib/Fundamentals/Negligible.lean`
 - `Cryptolib/Fundamentals/Uniform.lean`
+- `Cryptolib/PublicKeyEncryption.lean`
+- `Cryptolib/Tactic.lean`
 - `Cryptolib/ToMathlib.lean`
 
 All other code in this workspace is licensed under either of
