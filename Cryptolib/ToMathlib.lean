@@ -69,32 +69,6 @@ lemma multiset_ne_zero (n : ℕ) : (BitVec.fintype n).elems.val ≠ 0 := by
   -- simp only [pow_pos, nat.succ_pos']
   sorry
 
--- missing bitvec lemmas used in streams ciphers.
--- TODO: they need proof
-variable (n : ℕ)
-variable (a b c : BitVec n)
-
-lemma add_self : a + a = BitVec.zero n := by sorry
--- lemma add_assoc : a + b + c = a + (b + c) := by sorry
--- lemma zero_add : a = BitVec.zero n + a := by sorry
-lemma add_self_assoc : b = a + (a + b) := by sorry
-  -- rw [←add_assoc, add_self, ←zero_add]
-
--- lemma add_comm : a + b = b + a := by
---   -- idea: convert a and b to ℕ and prove comm there
---   have ha := bitvec.to_nat a
---   have hb := bitvec.to_nat b
---   sorry
-
-lemma add_assoc_self : b = a + b + a := by
-  -- rw [add_comm, ←add_assoc, add_self, ←zero_add]
-  sorry
-
-lemma add_assoc_self_reduce : c = a + (b + (a + (b + c))) := by
-  rw [←add_assoc, ←add_assoc, ←add_assoc]
-  -- rw [←add_assoc_self, add_self, ←zero_add]
-  sorry
-
 -- def to_list (length: ℕ) (B : BitVec length) : List Bool :=
 --   Vector.to_list B
 
